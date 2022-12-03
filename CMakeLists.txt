@@ -8,6 +8,7 @@ set(SRC_DIR .${CURRENT_SOURCE_DIR}/src)
 add_executable(
 	${PROJECT_NAME}
 	${SRC_DIR}/main.cpp
+	${SRC_DIR}/util/emath.cpp
 )
 
 # ASCII-Boy makes use of C++20 features.
