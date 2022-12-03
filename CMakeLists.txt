@@ -11,6 +11,8 @@ add_executable(
 	${SRC_DIR}/util/emath.cpp
 )
 
+target_link_libraries(${PROJECT_NAME} fmt)
+
 # ASCII-Boy makes use of C++20 features.
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_EXTENSIONS OFF)

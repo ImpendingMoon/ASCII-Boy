@@ -17,5 +17,8 @@
 #include <iostream>
 #include <fstream>
 
+// External Libraries //
+#include <fmt/core.h>
+
 // Utils //
 #include "util/emath.hpp"

@@ -11,6 +11,8 @@
  The main entrypoint for ASCII-Boy.
  ******************************************************************************/
 
+#include "main.hpp"
+
 int main()
 {
 	return 0;
