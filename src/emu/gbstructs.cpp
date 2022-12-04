@@ -4,7 +4,7 @@
  AUTHOR : ImpendingMoon
  EDITORS: ImpendingMoon,
  CREATED: 3 Dec 2022
- EDITED : 3 Dec 2022
+ EDITED : 4 Dec 2022
  ******************************************************************************/
 
 /******************************************************************************
@@ -40,3 +40,39 @@ std::string enumToString(TargetID id)
 	return output;
 }
 
+
+// FLAGREGISTER CLASS //
+
+
+// Converts a byte (f register) into flag booleans
+FlagRegister::FlagRegister()
+{
+	zero = false;
+	subtract = false;
+	half_carry = false;
+	carry = false;
+}
+
+
+// Converts the flags into a byte (f register)
+byte FlagRegister::flagsToByte()
+{
+	byte output = 0;
+	output |= (zero << ZERO_POSITION);
+	output |= (subtract << SUBTRACT_POSITION);
+	output |= (half_carry << HALF_CARRY_POSITION);
+	output |= (carry << CARRY_POSITION);
+	return output;
+}
+
+
+// Converts the flags into a byte (f register)
+void FlagRegister::byteToFlags(byte f_reg)
+{
+	zero = (f_reg >> ZERO_POSITION) & 1;
+	subtract = (f_reg >> SUBTRACT_POSITION) & 1;
+	half_carry = (f_reg >> HALF_CARRY_POSITION) & 1;
+	carry = (f_reg >> CARRY_POSITION) & 1;
+}
+
+// END FLAGREGISTER CLASS //

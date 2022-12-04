@@ -4,7 +4,7 @@
  AUTHOR : ImpendingMoon
  EDITORS: ImpendingMoon,
  CREATED: 3 Dec 2022
- EDITED : 3 Dec 2022
+ EDITED : 4 Dec 2022
  ******************************************************************************/
 
 /******************************************************************************
@@ -15,14 +15,22 @@
 
 #include "../core.hpp"
 
+#include "cpu.hpp"
+#include "mmu.hpp"
+
 class GBSystem
 {
 public:
 	// Constructor
-	GBSystem();
-private:
-	std::string rom_file_path;
-	std::string sav_file_path;
+	GBSystem(std::string rom_file_path);
 
-	// TODO: Add Components as added
+	CPU cpu;
+	MMU mem;
+
+private:
+	std::string rom_file_path; // Full file path for the GB ROM
+	std::string sav_file_path; // Typically same dir as the ROM
+
+	uint internal_speed; // The processor speed in Hz
+
 };

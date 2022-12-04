@@ -4,7 +4,7 @@
  AUTHOR : ImpendingMoon
  EDITORS: ImpendingMoon,
  CREATED: 3 Dec 2022
- EDITED : 3 Dec 2022
+ EDITED : 4 Dec 2022
  ******************************************************************************/
 
 /******************************************************************************
@@ -45,6 +45,31 @@ namespace gbstructs
 		ushort sp;
 		ushort pc;
 	};
+
+
+
+	// The flag register is a set of 4 bools
+	class FlagRegister
+	{
+	public:
+		bool zero;
+		bool subtract;
+		bool half_carry;
+		bool carry;
+
+		static constexpr int ZERO_POSITION = 7;
+		static constexpr int SUBTRACT_POSITION = 6;
+		static constexpr int HALF_CARRY_POSITION = 5;
+		static constexpr int CARRY_POSITION = 4;
+
+		FlagRegister();
+
+		// Converts a byte (f register) into flag booleans
+		void byteToFlags(byte f_reg);
+		// Converts the flags into a byte (f register)
+		byte flagsToByte();
+	};
+
 
 	// Used to generalize targets for instructions. Also useful for logging.
 	enum TargetID

@@ -4,7 +4,7 @@
  AUTHOR : ImpendingMoon
  EDITORS: ImpendingMoon,
  CREATED: 3 Dec 2022
- EDITED : 3 Dec 2022
+ EDITED : 4 Dec 2022
  ******************************************************************************/
 
 /******************************************************************************
@@ -16,6 +16,8 @@
 // Standard Library //
 #include <iostream>
 #include <fstream>
+#include <filesystem>
+#include <string>
 
 // External Libraries //
 #include <fmt/core.h>

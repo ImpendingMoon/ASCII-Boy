@@ -4,7 +4,7 @@
  AUTHOR : ImpendingMoon
  EDITORS: ImpendingMoon,
  CREATED: 3 Dec 2022
- EDITED : 3 Dec 2022
+ EDITED : 4 Dec 2022
  ******************************************************************************/
 
 /******************************************************************************
@@ -12,3 +12,20 @@
  ******************************************************************************/
 
 #pragma once
+
+#include "../core.hpp"
+#include "gbstructs.hpp"
+
+using namespace gbstructs;
+
+class CPU
+{
+public:
+	CPU();
+private:
+	RegisterSet regs;
+	FlagRegister flags;
+
+	bool halted;
+	bool next_halted_state;
+};
