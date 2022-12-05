@@ -18,6 +18,9 @@ using namespace std;
 // Constructor
 GBSystem::GBSystem(string rom_file_path)
 {
+	cpu = new CPU();
+	mem = new MMU();
+
 	internal_speed = 4194304; // GB always starts out in standard speed mode
 
 	// File path handling //
@@ -45,9 +48,11 @@ GBSystem::GBSystem(string rom_file_path)
 
 	// End file path handling //
 
-	
-
 }
 
-
-
+// Destructor
+GBSystem::~GBSystem()
+{
+	delete cpu;
+	delete mem;
+}

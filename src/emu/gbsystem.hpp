@@ -23,9 +23,13 @@ class GBSystem
 public:
 	// Constructor
 	GBSystem(std::string rom_file_path);
+	// Destructor
+	virtual ~GBSystem();
 
-	CPU cpu;
-	MMU mem;
+
+	CPU* cpu;
+	MMU* mem;
+
 
 private:
 	std::string rom_file_path; // Full file path for the GB ROM
