@@ -9,6 +9,7 @@ add_executable(
 	${PROJECT_NAME}
 	${SRC_DIR}/main.cpp
 	${SRC_DIR}/util/emath.cpp
+	${SRC_DIR}/util/logger.cpp
 	${SRC_DIR}/emu/gbstructs.cpp
 	${SRC_DIR}/emu/gbsystem.cpp
 	${SRC_DIR}/emu/cpu.cpp

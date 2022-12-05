@@ -15,5 +15,12 @@
 
 int main()
 {
+	Logger::instance().log("ASCII-Boy Starting.", Logger::VERBOSE);
+
+
+	// TODO: Stuff
+
+	Logger::instance().log("ASCII-Boy Exiting.", Logger::VERBOSE);
+
 	return 0;
 }

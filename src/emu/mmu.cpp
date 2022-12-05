@@ -4,7 +4,7 @@
  AUTHOR : ImpendingMoon
  EDITORS: ImpendingMoon,
  CREATED: 3 Dec 2022
- EDITED : 4 Dec 2022
+ EDITED : 5 Dec 2022
  ******************************************************************************/
 
 /******************************************************************************
@@ -16,7 +16,6 @@
 MMU::MMU()
 {
 	// All banked memory is handled by the cartridge when loading a ROM file
-	// This is because those memory chips are handled by the cartridge.
 	ROM2 = nullptr;
 	ERAM = nullptr;
 
