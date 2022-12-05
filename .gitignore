@@ -1,6 +1,7 @@
 *.sublime-project
 *.sublime-workspace
 .vscode/
+.cache/
 build/
 CMakeFiles/
 compile_commands.json

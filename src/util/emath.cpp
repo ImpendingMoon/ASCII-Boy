@@ -31,7 +31,6 @@ void emath::ushortToBytes(ushort value, byte* msb, byte* lsb)
     *lsb = (value & 0x00FF);
 }
 
-
 // Wraps the value from the min/max
 int emath::wrap(int value, int min, int max)
 {
