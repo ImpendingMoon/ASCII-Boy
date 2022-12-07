@@ -4,7 +4,7 @@
  AUTHOR : ImpendingMoon
  EDITORS: ImpendingMoon,
  CREATED: 3 Dec 2022
- EDITED : 4 Dec 2022
+ EDITED : 7 Dec 2022
  ******************************************************************************/
 
 /******************************************************************************
@@ -18,8 +18,6 @@ using namespace std;
 // Constructor
 GBSystem::GBSystem(string rom_file_path)
 {
-	cpu = new CPU();
-	mem = new MMU();
 
 	internal_speed = 4194304; // GB always starts out in standard speed mode
 
@@ -36,6 +34,4 @@ GBSystem::GBSystem(string rom_file_path)
 // Destructor
 GBSystem::~GBSystem()
 {
-	delete cpu;
-	delete mem;
 }

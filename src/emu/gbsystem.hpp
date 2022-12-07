@@ -4,7 +4,7 @@
  AUTHOR : ImpendingMoon
  EDITORS: ImpendingMoon,
  CREATED: 3 Dec 2022
- EDITED : 4 Dec 2022
+ EDITED : 7 Dec 2022
  ******************************************************************************/
 
 /******************************************************************************
@@ -27,13 +27,13 @@ public:
 	virtual ~GBSystem();
 
 
-	CPU* cpu;
-	MMU* mem;
+	CPU cpu;
+	MMU mem;
 
 
 private:
 	std::string rom_file_path; // Full file path for the GB ROM
 
-	uint internal_speed; // The processor speed in Hz
+	uint32_t internal_speed; // The processor speed in Hz
 
 };

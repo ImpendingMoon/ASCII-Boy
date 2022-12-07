@@ -4,7 +4,7 @@
  AUTHOR : ImpendingMoon
  EDITORS: ImpendingMoon,
  CREATED: 3 Dec 2022
- EDITED : 4 Dec 2022
+ EDITED : 7 Dec 2022
  ******************************************************************************/
 
 /******************************************************************************
@@ -23,27 +23,27 @@ namespace gbstructs
 		// (many things. im just lazy.) -IM
 
 		union { // AF
-			ushort af;
-			struct { byte f, a; };
+			uint16_t af;
+			struct { uint8_t f, a; };
 		};
 
 		union { // BC
-			ushort bc;
-			struct { byte c, b; };
+			uint16_t bc;
+			struct { uint8_t c, b; };
 		};
 
 		union { // DE
-			ushort de;
-			struct { byte e, d; };
+			uint16_t de;
+			struct { uint8_t e, d; };
 		};
 
 		union { // HL
-			ushort hl;
-			struct { byte l, h; };
+			uint16_t hl;
+			struct { uint8_t l, h; };
 		};
 
-		ushort sp;
-		ushort pc;
+		uint16_t sp;
+		uint16_t pc;
 	};
 
 
@@ -65,9 +65,9 @@ namespace gbstructs
 		FlagRegister();
 
 		// Converts a byte (f register) into flag booleans
-		void byteToFlags(byte f_reg);
+		void byteToFlags(uint8_t f_reg);
 		// Converts the flags into a byte (f register)
-		byte flagsToByte();
+		uint8_t flagsToByte();
 	};
 
 

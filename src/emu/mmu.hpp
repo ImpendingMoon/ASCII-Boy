@@ -23,16 +23,16 @@ public:
 	~MMU();
 
 	// Reads a byte from memory
-	byte readByte(ushort address);
+	uint8_t readByte(uint16_t address);
 	// Reads a byte from memory, ignoring PPU locks
-	byte readByte(ushort address, bool is_ppu);
+	uint8_t readByte(uint16_t address, bool is_ppu);
 	// Writes a byte to memory, if legal
-	byte writeByte(ushort address, byte value);
+	uint8_t writeByte(uint16_t address, uint8_t value);
 	// Writes a byte to memory, ignoring PPU locks
-	byte writeByte(ushort address, byte value, bool is_ppu);
+	uint8_t writeByte(uint16_t address, uint8_t value, bool is_ppu);
 
 	// Reads a byte from memory, without logging. For dumping memory.
-	byte getByte(ushort address);
+	uint8_t getByte(uint16_t address);
 
 	// Sets the current ROM2 bank
 	void setROM2Index(int index);
@@ -44,7 +44,7 @@ public:
 	int getERAMIndex();
 
 	// Sets ROM2 to a 2D array of bytes
-	void setROM2(byte** banks);
+	void setROM2(uint8_t** banks);
 
 	// Sets the ORAM_locked state
 	void setORAMLocked(bool value);
@@ -60,29 +60,29 @@ public:
 
 private:
 	// Memory banks
-	byte ROM1[0x4000]; // Static ROM $0000-$3FFF
+	uint8_t ROM1[0x4000]; // Static ROM $0000-$3FFF
 
-	byte** ROM2; // Banked ROM $4000-$7FFF
+	uint8_t** ROM2; // Banked ROM $4000-$7FFF
 	int ROM2_index; // Which ROM2 bank the MMU uses
 
-	byte VRAM[0x2000]; // VRAM $8000-9FFF
+	uint8_t VRAM[0x2000]; // VRAM $8000-9FFF
 
 	// External RAM $A000-BFFF. Handled by Cartridge
 	int ERAM_index; // Which ERAM bank the MMU uses
 
-	byte WRAM[0x2000]; // Work RAM $C000-DFFF - Banked in CGB
+	uint8_t WRAM[0x2000]; // Work RAM $C000-DFFF - Banked in CGB
 
 	// Echo RAM $E000-$FDFF
 	
-	byte OAM[0x100]; // Object Attribute Memory $FE00-$FE9F
+	uint8_t OAM[0x100]; // Object Attribute Memory $FE00-$FE9F
 
 	// Unmapped memory $FEA0-FEFF
 	
-	byte IOReg[0x80]; // I/O Registers $FF00-FF7F
+	uint8_t IOReg[0x80]; // I/O Registers $FF00-FF7F
 					  
-	byte HRAM[0x80]; // HRAM $FF80-$FFFE
+	uint8_t HRAM[0x80]; // HRAM $FF80-$FFFE
 					 
-	byte IEReg; // Interrupt Enable Register $FFFF
+	uint8_t IEReg; // Interrupt Enable Register $FFFF
 
 	// ORAM and VRAM access is locked during some PPU states
 	bool ORAM_locked;

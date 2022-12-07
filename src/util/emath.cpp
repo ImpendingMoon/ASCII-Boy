@@ -4,7 +4,7 @@
  AUTHOR : ImpendingMoon
  EDITORS: ImpendingMoon,
  CREATED: 3 Dec 2022
- EDITED : 3 Dec 2022
+ EDITED : 7 Dec 2022
  ******************************************************************************/
 
 /******************************************************************************
@@ -13,10 +13,10 @@
 
 #include "emath.hpp"
 
-// Converts two bytes into one ushort
-ushort emath::bytesToUShort(byte msb, byte lsb)
+// Converts two bytes into one uint16_t
+uint16_t emath::bytesToUShort(uint8_t msb, uint8_t lsb)
 {
-    ushort output;
+    uint16_t output;
     output = (msb << 8);
     output += lsb;
 
@@ -24,8 +24,8 @@ ushort emath::bytesToUShort(byte msb, byte lsb)
 }
 
 
-// Converts a ushort into two bytes
-void emath::ushortToBytes(ushort value, byte* msb, byte* lsb)
+// Converts a uint16_t into two bytes
+void emath::ushortToBytes(uint16_t value, uint8_t* msb, uint8_t* lsb)
 {
     *msb = (value & 0xFF00) >> 8;
     *lsb = (value & 0x00FF);

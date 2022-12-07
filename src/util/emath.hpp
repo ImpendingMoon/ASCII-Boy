@@ -4,7 +4,7 @@
  AUTHOR : ImpendingMoon
  EDITORS: ImpendingMoon,
  CREATED: 3 Dec 2022
- EDITED : 3 Dec 2022
+ EDITED : 7 Dec 2022
  ******************************************************************************/
 
 /******************************************************************************
@@ -13,20 +13,16 @@
 
 #pragma once
 
-// Typedefs for easier to remember types
-typedef unsigned char byte;
-typedef unsigned short ushort;
-typedef unsigned int uint;
-typedef unsigned long ulong;
+#include <cstdint>
 
 namespace emath
 {
     // FUNCTIONS //
 
-    // Converts two bytes into one ushort
-    ushort bytesToUShort(byte msb, byte lsb);
-    // Converts a ushort into two bytes
-    void ushortToBytes(ushort value, byte* msb, byte* lsb);
+    // Converts two bytes into one uint16_t
+    uint16_t bytesToUShort(uint8_t msb, uint8_t lsb);
+    // Converts a uint16_t into two bytes
+    void ushortToBytes(uint16_t value, uint8_t* msb, uint8_t* lsb);
 
 
     // Wraps the value from the min/max

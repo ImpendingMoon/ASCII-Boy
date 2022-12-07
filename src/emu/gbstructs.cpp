@@ -4,7 +4,7 @@
  AUTHOR : ImpendingMoon
  EDITORS: ImpendingMoon,
  CREATED: 3 Dec 2022
- EDITED : 4 Dec 2022
+ EDITED : 7 Dec 2022
  ******************************************************************************/
 
 /******************************************************************************
@@ -55,9 +55,9 @@ FlagRegister::FlagRegister()
 
 
 // Converts the flags into a byte (f register)
-byte FlagRegister::flagsToByte()
+uint8_t FlagRegister::flagsToByte()
 {
-	byte output = 0;
+	uint8_t output = 0;
 	output |= (zero << ZERO_POSITION);
 	output |= (subtract << SUBTRACT_POSITION);
 	output |= (half_carry << HALF_CARRY_POSITION);
@@ -67,7 +67,7 @@ byte FlagRegister::flagsToByte()
 
 
 // Converts the flags into a byte (f register)
-void FlagRegister::byteToFlags(byte f_reg)
+void FlagRegister::byteToFlags(uint8_t f_reg)
 {
 	zero = (f_reg >> ZERO_POSITION) & 1;
 	subtract = (f_reg >> SUBTRACT_POSITION) & 1;

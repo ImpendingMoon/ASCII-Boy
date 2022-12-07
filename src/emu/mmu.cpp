@@ -103,7 +103,7 @@ bool MMU::getVRAMLocked()
 }
 
 // Sets ROM2 to a 2D array of bytes
-void MMU::setROM2(byte** banks)
+void MMU::setROM2(uint8_t** banks)
 {
 	ROM2 = banks;
 }
@@ -115,7 +115,7 @@ void MMU::setROM2(byte** banks)
 // Memory Functions //
 
 // Reads a byte from memory
-byte MMU::readByte(ushort address)
+uint8_t MMU::readByte(uint16_t address)
 {
 	// Check for ECHO RAM
 	
