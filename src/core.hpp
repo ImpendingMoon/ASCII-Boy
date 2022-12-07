@@ -19,6 +19,8 @@
 #include <filesystem>
 #include <string>
 #include <chrono>
+#include <array>
+#include <cstdint>
 
 // Windows Libraries //
 #ifdef _WIN32

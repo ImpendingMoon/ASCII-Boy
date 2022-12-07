@@ -60,27 +60,28 @@ public:
 
 private:
 	// Memory banks
-	uint8_t ROM1[0x4000]; // Static ROM $0000-$3FFF
+	std::array<uint8_t, 0x4000> ROM1; // Static ROM $0000-$3FFF
 
+	// Cannot easily make a pointer to an std::array of unknown size.
 	uint8_t** ROM2; // Banked ROM $4000-$7FFF
 	int ROM2_index; // Which ROM2 bank the MMU uses
 
-	uint8_t VRAM[0x2000]; // VRAM $8000-9FFF
+	std::array<uint8_t, 0x4000> VRAM; // VRAM $8000-$9FFF
 
 	// External RAM $A000-BFFF. Handled by Cartridge
 	int ERAM_index; // Which ERAM bank the MMU uses
 
-	uint8_t WRAM[0x2000]; // Work RAM $C000-DFFF - Banked in CGB
+	std::array<uint8_t, 0x2000> WRAM; // Work RAM $C000-$DFFF
 
 	// Echo RAM $E000-$FDFF
 	
-	uint8_t OAM[0x100]; // Object Attribute Memory $FE00-$FE9F
+	std::array<uint8_t, 0x100> OAM; // Object Attribute Memory $FE00-$FE9F
 
 	// Unmapped memory $FEA0-FEFF
 	
-	uint8_t IOReg[0x80]; // I/O Registers $FF00-FF7F
+	std::array<uint8_t, 0x80> IOReg; // I/O Registers $FF00-$FF7F
 					  
-	uint8_t HRAM[0x80]; // HRAM $FF80-$FFFE
+	std::array<uint8_t, 0x80> HRAM; // HRAM $FF80-$FFFE
 					 
 	uint8_t IEReg; // Interrupt Enable Register $FFFF
 

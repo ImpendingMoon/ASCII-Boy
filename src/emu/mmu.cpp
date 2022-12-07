@@ -25,20 +25,14 @@ MMU::MMU()
 	// Initialize memory
 	// This isn't required, but makes logging and debugging easier
 
-	// ROM1
-	for(ulong i = 0; i < sizeof ROM1; i++) { ROM1[i] = 0; }
-	// VRAM
-	for(ulong i = 0; i < sizeof VRAM; i++) { VRAM[i] = 0; }
-	// WRAM
-	for(ulong i = 0; i < sizeof WRAM; i++) { WRAM[i] = 0; }
-	// OAM
-	for(ulong i = 0; i < sizeof OAM; i++) { OAM[i] = 0; }
-	// IOReg
-	for(ulong i = 0; i < sizeof IOReg; i++) { IOReg[i] = 0; }
-	// HRAM
-	for(ulong i = 0; i < sizeof HRAM; i++) { HRAM[i] = 0; }
+	for(uint8_t& value : ROM1) { value = 0; }
+	for(uint8_t& value : VRAM) { value = 0; }
+	for(uint8_t& value : WRAM) { value = 0; }
+	for(uint8_t& value : OAM ) { value = 0; }
+	for(uint8_t& value : IOReg){ value = 0; }
+	for(uint8_t& value : HRAM) { value = 0; }
 
-	IEReg = 0x00;
+	IEReg = 0;
 
 	ORAM_locked = false;
 	VRAM_locked = false;
