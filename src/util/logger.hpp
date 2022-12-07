@@ -4,7 +4,7 @@
  AUTHOR : ImpendingMoon
  EDITORS: ImpendingMoon,
  CREATED: 5 Dec 2022
- EDITED : 5 Dec 2022
+ EDITED : 7 Dec 2022
  ******************************************************************************/
 
 /******************************************************************************
@@ -16,6 +16,7 @@
 #include <iostream>
 #include <fstream>
 #include <filesystem>
+#include <fmt/core.h>
 
 // Logger is a singleton that handles writing to console/logfile
 // NOTE: Creation is not thread-safe, but is called in main() before anything
