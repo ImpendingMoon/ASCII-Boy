@@ -33,7 +33,6 @@ public:
 
 private:
 	std::string rom_file_path; // Full file path for the GB ROM
-	std::string sav_file_path; // Typically same dir as the ROM
 
 	uint internal_speed; // The processor speed in Hz
 

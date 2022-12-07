@@ -23,17 +23,17 @@ MMU::MMU()
 	// This isn't required, but makes logging and debugging easier
 
 	// ROM1
-	for(int i = 0; i < sizeof ROM1; i++) { ROM1[i] = 0; }
+	for(ulong i = 0; i < sizeof ROM1; i++) { ROM1[i] = 0; }
 	// VRAM
-	for(int i = 0; i < sizeof VRAM; i++) { VRAM[i] = 0; }
+	for(ulong i = 0; i < sizeof VRAM; i++) { VRAM[i] = 0; }
 	// WRAM
-	for(int i = 0; i < sizeof WRAM; i++) { WRAM[i] = 0; }
+	for(ulong i = 0; i < sizeof WRAM; i++) { WRAM[i] = 0; }
 	// OAM
-	for(int i = 0; i < sizeof OAM; i++) { OAM[i] = 0; }
+	for(ulong i = 0; i < sizeof OAM; i++) { OAM[i] = 0; }
 	// IOReg
-	for(int i = 0; i < sizeof IOReg; i++) { IOReg[i] = 0; }
+	for(ulong i = 0; i < sizeof IOReg; i++) { IOReg[i] = 0; }
 	// HRAM
-	for(int i = 0; i < sizeof HRAM; i++) { HRAM[i] = 0; }
+	for(ulong i = 0; i < sizeof HRAM; i++) { HRAM[i] = 0; }
 
 	IEReg = 0x00;
 }

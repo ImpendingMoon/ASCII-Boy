@@ -12,7 +12,6 @@
  ******************************************************************************/
 
 #include "logger.hpp"
-#include <filesystem>
 
 using namespace std;
 
