@@ -27,9 +27,9 @@ public:
 	// Reads a byte from memory, ignoring PPU locks
 	uint8_t readByte(uint16_t address, bool is_ppu);
 	// Writes a byte to memory, if legal
-	uint8_t writeByte(uint16_t address, uint8_t value);
+	void writeByte(uint16_t address, uint8_t value);
 	// Writes a byte to memory, ignoring PPU locks
-	uint8_t writeByte(uint16_t address, uint8_t value, bool is_ppu);
+	void writeByte(uint16_t address, uint8_t value, bool is_ppu);
 
 	// Reads a byte from memory, without logging. For dumping memory.
 	uint8_t getByte(uint16_t address);
@@ -43,13 +43,17 @@ public:
 	// Gets the current ERAM index
 	int getERAMIndex();
 
+	// Sets ROM1 to an array of bytes
+	void setROM1(std::array<uint8_t, 0x4000> bank);
 	// Sets ROM2 to a 2D array of bytes
-	void setROM2(uint8_t** banks);
+	void setROM2(uint8_t** banks, int bank_amount);
+	// Sets the amount of ERAM banks avaliable
+	void setERAMAmount(int bank_amount);
 
 	// Sets the ORAM_locked state
-	void setORAMLocked(bool value);
+	void setOAMLocked(bool value);
 	// Gets the ORAM_locked state
-	bool getORAMLocked();
+	bool getOAMLocked();
 	// Sets the VRAM_locked state
 	void setVRAMLocked(bool value);
 	// Gets the VRAM_locked state
@@ -65,11 +69,13 @@ private:
 	// Cannot easily make a pointer to an std::array of unknown size.
 	uint8_t** ROM2; // Banked ROM $4000-$7FFF
 	int ROM2_index; // Which ROM2 bank the MMU uses
+	int ROM2_bank_amount; // Amount of ROM banks that exist
 
 	std::array<uint8_t, 0x4000> VRAM; // VRAM $8000-$9FFF
 
 	// External RAM $A000-BFFF. Handled by Cartridge
 	int ERAM_index; // Which ERAM bank the MMU uses
+	int ERAM_bank_amount; // Amount of ERAM banks that exist
 
 	std::array<uint8_t, 0x2000> WRAM; // Work RAM $C000-$DFFF
 
@@ -86,6 +92,6 @@ private:
 	uint8_t IEReg; // Interrupt Enable Register $FFFF
 
 	// ORAM and VRAM access is locked during some PPU states
-	bool ORAM_locked;
+	bool OAM_locked;
 	bool VRAM_locked;
 };

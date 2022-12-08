@@ -18,6 +18,6 @@ add_executable(
 
 target_link_libraries(${PROJECT_NAME} fmt)
 
-# ASCII-Boy makes use of C++20 features.
-target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
+# ASCII-Boy makes use of C++17 features.
+target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_EXTENSIONS OFF)

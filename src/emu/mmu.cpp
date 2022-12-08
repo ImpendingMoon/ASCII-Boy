@@ -17,24 +17,21 @@
 // Constructor
 MMU::MMU()
 {
-	// All banked memory is handled by the cartridge when loading a ROM file
+	// ROM banks are handled by the cartridge when loading a ROM file
 	ROM2 = nullptr;
 	ROM2_index = 0;
 	ERAM_index = 0;
 
 	// Initialize memory
 	// This isn't required, but makes logging and debugging easier
-
-	for(uint8_t& value : ROM1) { value = 0; }
-	for(uint8_t& value : VRAM) { value = 0; }
-	for(uint8_t& value : WRAM) { value = 0; }
-	for(uint8_t& value : OAM ) { value = 0; }
-	for(uint8_t& value : IOReg){ value = 0; }
-	for(uint8_t& value : HRAM) { value = 0; }
-
+	ROM1.fill(0);
+	VRAM.fill(0);
+	WRAM.fill(0);
+	OAM.fill(0);
+	IOReg.fill(0);
 	IEReg = 0;
 
-	ORAM_locked = false;
+	OAM_locked = false;
 	VRAM_locked = false;
 }
 
@@ -73,15 +70,15 @@ int MMU::getERAMIndex()
 }
 
 // Sets the ORAM_locked state
-void MMU::setORAMLocked(bool value)
+void MMU::setOAMLocked(bool value)
 {
-	ORAM_locked = value;
+	OAM_locked = value;
 }
 
 // Gets the ORAM_locked state
-bool MMU::getORAMLocked()
+bool MMU::getOAMLocked()
 {
-	return ORAM_locked;
+	return OAM_locked;
 }
 
 // Sets the VRAM_locked state
@@ -96,10 +93,18 @@ bool MMU::getVRAMLocked()
 	return VRAM_locked;
 }
 
+// Sets ROM1 to an array of bytes
+void MMU::setROM1(std::array<uint8_t, 0x4000> bank)
+{
+	// Copy the passed bank into ROM1 so that the Cartridge can free its memory
+	std::copy(bank.begin(), bank.end(), ROM1.begin());
+}
+
 // Sets ROM2 to a 2D array of bytes
-void MMU::setROM2(uint8_t** banks)
+void MMU::setROM2(uint8_t** banks, int bank_amount)
 {
 	ROM2 = banks;
+	ROM2_bank_amount = bank_amount;
 }
 
 // End SGetters //
@@ -111,6 +116,420 @@ void MMU::setROM2(uint8_t** banks)
 // Reads a byte from memory
 uint8_t MMU::readByte(uint16_t address)
 {
+	// Call readByte() with is_ppu false
+	return readByte(address, false);
+}
+
+
+// Reads a byte from memory, can ignore PPU locks
+uint8_t MMU::readByte(uint16_t address, bool is_ppu)
+{
+	Logger::instance().log(
+			fmt::format("MEM: Reading value from ${:04X}.",
+						address),
+			Logger::EXTREME);
+
 	// Check for ECHO RAM
-	
+	if(address >= 0xE000 && address <= 0xFDFF)
+	{
+		// Echos memory between $C000-$DDFF
+		uint16_t relative_address = address - 0x2000;
+		return readByte(relative_address, is_ppu);
+	}
+
+	// Check for unmapped memory
+	if(address >= 0xFEA0 && address <= 0xFEFF)
+	{
+		return 0xFF; // Usually returns 0xFF from the bus on hardware
+		Logger::instance().log(
+				"MEM: Attempted read of undefined memory.",
+				Logger::DEBUG);
+	}
+
+	// ROM1
+	if(address <= 0x3FFF)
+	{
+		return ROM1[address]; // Guaranteed to be in-bounds at compile time
+	}
+
+	// ROM2
+	if(address >= 0x4000 && address <= 0x7FFF)
+	{
+		// Bounds checking
+		if(ROM2_index < 0 || ROM2_index >= ROM2_bank_amount)
+		{
+			Logger::instance().log(
+					"MEM: Attempted read of invalid ROM2 bank.",
+					Logger::DEBUG);
+
+			return 0xFF;
+		}
+
+		uint16_t relative_address = address - 0x4000;
+		
+		// Read byte at address in bank
+		return ROM2[ROM2_index][relative_address];
+	}
+
+	// VRAM
+	if(address >= 0x8000 && address <= 0x9FFF)
+	{
+		// If VRAM is locked and not accessing as PPU, return 0xFF from bus
+		if(VRAM_locked && !is_ppu)
+		{
+			return 0xFF;
+		}
+
+		uint16_t relative_address = address - 0x8000;
+
+		return VRAM[relative_address];
+	}
+
+	// External RAM is handled by Cartridge
+	if(address >= 0xA000 && address <= 0xBFFF)
+	{
+		// Bounds checking
+		if(ERAM_index < 0 || ERAM_index >= ERAM_bank_amount)
+		{
+			Logger::instance().log(
+					"MEM: Attempted read of invalid ERAM bank.",
+					Logger::DEBUG);
+
+			return 0xFF;
+		}
+
+		// TODO: Interface with Cartridge
+		return 0xFF;
+	}
+
+	// WRAM
+	if(address >= 0xC000 && address <= 0xDFFF)
+	{
+		uint16_t relative_address = address - 0xC000;
+
+		return WRAM[relative_address];
+	}
+
+	// OAM
+	if(address >= 0xFE00 && address <= 0xFE9F)
+	{
+		// If OAM is locked and not accessing as PPU, return 0xFF from bus
+		if(OAM_locked && !is_ppu)
+		{
+			return 0xFF;
+		}
+
+		uint16_t relative_address = address - 0xFE00;
+
+		return OAM[relative_address];
+	}
+
+	// IOReg
+	if(address >= 0xFF00 && address <= 0xFF7F)
+	{
+		uint16_t relative_address = address - 0xFF00;
+
+		return IOReg[relative_address];
+	}
+
+	// HRAM
+	if(address >= 0xFF80 && address <= 0xFFFE)
+	{
+		uint16_t relative_address = address - 0xFF80;
+
+		return HRAM[relative_address];
+	}
+
+	// IEReg
+	if(address == 0xFFFF)
+	{
+		return IEReg;
+	}
+
+	// This should not be an accessible branch.
+	Logger::instance().log(
+			"MEM: Invalid address provided to readByte()!",
+			Logger::ERRORS);
+
+	return 0xFF;
+}
+
+
+
+// Writes a byte to memory, if legal
+void MMU::writeByte(uint16_t address, uint8_t value)
+{
+	writeByte(address, value, false);
+}
+
+
+// Writes a byte to memory, can ignore PPU locks
+void MMU::writeByte(uint16_t address, uint8_t value, bool is_ppu)
+{
+	Logger::instance().log(
+			fmt::format("MEM: Writing value 0x{:02X} to ${:04X}.",
+						value, address),
+			Logger::EXTREME);
+
+	// Check for ECHO RAM
+	if(address >= 0xE000 && address <= 0xFDFF)
+	{
+		// Echos memory between $C000-$DDFF
+		uint16_t relative_address = address - 0x2000;
+		writeByte(relative_address, value, is_ppu);
+		return;
+	}
+
+	// Check for unmapped memory
+	if(address >= 0xFEA0 && address <= 0xFEFF)
+	{
+		Logger::instance().log(
+				"MEM: Attempted write of undefined memory.",
+				Logger::DEBUG);
+		return;
+	}
+
+	// ROM1
+	if(address <= 0x3FFF)
+	{
+		ROM1[address] = value; // Guaranteed to be in-bounds
+		return;
+	}
+
+	// ROM2
+	if(address >= 0x4000 && address <= 0x7FFF)
+	{
+		// Bounds checking
+		if(ROM2_index < 0 || ROM2_index >= ROM2_bank_amount)
+		{
+			Logger::instance().log(
+					"MEM: Attempted write to invalid ROM2 bank.",
+					Logger::DEBUG);
+
+			return;
+		}
+
+		uint16_t relative_address = address - 0x4000;
+		
+		// Read byte at address in bank
+		ROM2[ROM2_index][relative_address] = value;
+		return;
+	}
+
+	// VRAM
+	if(address >= 0x8000 && address <= 0x9FFF)
+	{
+		// If VRAM is locked and not accessing as PPU, return 0xFF from bus
+		if(VRAM_locked && !is_ppu)
+		{
+			return; 
+		}
+
+		uint16_t relative_address = address - 0x8000;
+
+		VRAM[relative_address] = value;
+		return;
+	}
+
+	// External RAM is handled by Cartridge
+	if(address >= 0xA000 && address <= 0xBFFF)
+	{
+		// Bounds checking
+		if(ERAM_index < 0 || ERAM_index >= ERAM_bank_amount)
+		{
+			Logger::instance().log(
+					"MEM: Attempted write to invalid ERAM bank.",
+					Logger::DEBUG);
+
+			return;
+		}
+
+		// TODO: Interface with Cartridge
+		return;
+	}
+
+	// WRAM
+	if(address >= 0xC000 && address <= 0xDFFF)
+	{
+		uint16_t relative_address = address - 0xC000;
+
+		WRAM[relative_address] = value;
+		return;
+	}
+
+	// OAM
+	if(address >= 0xFE00 && address <= 0xFE9F)
+	{
+		// If OAM is locked and not accessing as PPU, return 0xFF from bus
+		if(OAM_locked && !is_ppu)
+		{
+			return;
+		}
+
+		uint16_t relative_address = address - 0xFE00;
+
+		OAM[relative_address] = value;
+	}
+
+	// IOReg
+	if(address >= 0xFF00 && address <= 0xFF7F)
+	{
+		uint16_t relative_address = address - 0xFF00;
+
+		IOReg[relative_address] = value;
+	}
+
+	// HRAM
+	if(address >= 0xFF80 && address <= 0xFFFE)
+	{
+		uint16_t relative_address = address - 0xFF80;
+
+		HRAM[relative_address] = value;
+	}
+
+	// IEReg
+	if(address == 0xFFFF)
+	{
+		IEReg = value;
+	}
+
+	// This should not be an accessible branch.
+	Logger::instance().log(
+			"MEM: Invalid address provided to writeByte()!",
+			Logger::ERRORS);
+}
+
+
+
+// Reads a byte from memory, without logging. For dumping memory.
+uint8_t MMU::getByte(uint16_t address)
+{
+	// Check for ECHO RAM
+	if(address >= 0xE000 && address <= 0xFDFF)
+	{
+		// Echos memory between $C000-$DDFF
+		uint16_t relative_address = address - 0x2000;
+		return getByte(relative_address);
+	}
+
+	// Check for unmapped memory
+	if(address >= 0xFEA0 && address <= 0xFEFF)
+	{
+		return 0x00;
+	}
+
+	// ROM1
+	if(address <= 0x3FFF)
+	{
+		return ROM1[address]; // Guaranteed to be in-bounds at compile time
+	}
+
+	// ROM2
+	if(address >= 0x4000 && address <= 0x7FFF)
+	{
+		// Bounds checking
+		if(ROM2_index < 0 || ROM2_index >= ROM2_bank_amount)
+		{
+			return 0x00;
+		}
+
+		uint16_t relative_address = address - 0x4000;
+		
+		// Read byte at address in bank
+		return ROM2[ROM2_index][relative_address];
+	}
+
+	// VRAM
+	if(address >= 0x8000 && address <= 0x9FFF)
+	{
+		uint16_t relative_address = address - 0x8000;
+
+		return VRAM[relative_address];
+	}
+
+	// External RAM is handled by Cartridge
+	if(address >= 0xA000 && address <= 0xBFFF)
+	{
+		// Bounds checking
+		if(ERAM_index < 0 || ERAM_index >= ERAM_bank_amount)
+		{
+			return 0x00;
+		}
+
+		// TODO: Interface with Cartridge
+		return 0x00;
+	}
+
+	// WRAM
+	if(address >= 0xC000 && address <= 0xDFFF)
+	{
+		uint16_t relative_address = address - 0xC000;
+
+		return WRAM[relative_address];
+	}
+
+	// OAM
+	if(address >= 0xFE00 && address <= 0xFE9F)
+	{
+		uint16_t relative_address = address - 0xFE00;
+
+		return OAM[relative_address];
+	}
+
+	// IOReg
+	if(address >= 0xFF00 && address <= 0xFF7F)
+	{
+		uint16_t relative_address = address - 0xFF00;
+
+		return IOReg[relative_address];
+	}
+
+	// HRAM
+	if(address >= 0xFF80 && address <= 0xFFFE)
+	{
+		uint16_t relative_address = address - 0xFF80;
+
+		return HRAM[relative_address];
+	}
+
+	// IEReg
+	if(address == 0xFFFF)
+	{
+		return IEReg;
+	}
+
+	// This should not be an accessible branch.
+	Logger::instance().log(
+			"MEM: Invalid address provided to getByte()!",
+			Logger::ERRORS);
+
+	return 0x00;
+}
+
+
+
+// Dumps the entire memory address space into a formatted string.
+std::string MMU::dumpMemory()
+{
+	std::string output = "";
+
+	output.append("--BEGIN MEMORY DUMP--\n");
+
+	// Iterate through entire address space
+	for(int i = 0; i <= 0xFFFF; i++)
+	{
+		// Add newline and address every 32 bytes
+		if(i % 32 == 0)
+		{
+			output.append( fmt::format("\n${:04X} ", i) );
+		}
+
+		uint8_t value = getByte(i);
+		// Format data as hexadecimal number
+		output.append( fmt::format("{:02X }", value) );
+	}
+
+	output.append("\n\n--END MEMORY DUMP--");
+
+	return output;
 }
