@@ -526,7 +526,7 @@ std::string MMU::dumpMemory()
 
 		uint8_t value = getByte(i);
 		// Format data as hexadecimal number
-		output.append( fmt::format("{:02X }", value) );
+		output.append( fmt::format("{:02X} ", value) );
 	}
 
 	output.append("\n\n--END MEMORY DUMP--");
