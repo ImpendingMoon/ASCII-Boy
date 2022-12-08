@@ -4,7 +4,7 @@
  AUTHOR : ImpendingMoon
  EDITORS: ImpendingMoon,
  CREATED: 5 Dec 2022
- EDITED :  Dec 2022
+ EDITED : 8 Dec 2022
  ******************************************************************************/
 
 /******************************************************************************
@@ -12,8 +12,6 @@
  ******************************************************************************/
 
 #include "logger.hpp"
-
-using namespace std;
 
 // Constructor
 Logger::Logger()
@@ -32,15 +30,15 @@ Logger::Logger()
 
 	try {
 		// Check to see if directory exists. If not, create it.
-		if(!filesystem::exists(log_file_path))
+		if(!std::filesystem::exists(log_file_path))
 		{
-			filesystem::create_directories(log_file_path);
+			std::filesystem::create_directories(log_file_path);
 		}
-	} catch(filesystem::filesystem_error ex) {
+	} catch(std::filesystem::filesystem_error& ex) {
 
-		cerr << "ERROR: Cannot create logfile directory.\n";
-		cerr << "Log File Path: " << log_file_path << "\n";
-		cerr << ex.what();
+		std::cerr << "ERROR: Cannot create logfile directory.\n";
+		std::cerr << "Log File Path: " << log_file_path << "\n";
+		std::cerr << ex.what();
 
 		// Exit Code 74 - IOERROR - from sysexits.h
 		exit(74);
@@ -49,13 +47,13 @@ Logger::Logger()
 	log_file_path.append("asciiboy.log");
 
 	// Open/Create the LogFile for writing
-	LogFile.open(log_file_path, ios_base::out);
+	LogFile.open(log_file_path, std::ios_base::out);
 
 	// Check to see if the file is valid. If not, exit.
 	if(!LogFile)
 	{
-		cerr << "ERROR: Cannot access logfile.\n";
-		cerr << "Log File Path: " << log_file_path << "\n";
+		std::cerr << "ERROR: Cannot access logfile.\n";
+		std::cerr << "Log File Path: " << log_file_path << "\n";
 
 		exit(74);
 	}
@@ -79,7 +77,7 @@ Logger::~Logger()
 
 
 // Gets the current file path for the LogFile
-string Logger::getLogFilePath()
+std::string Logger::getLogFilePath()
 {
 	return log_file_path;
 }
@@ -95,7 +93,7 @@ bool Logger::isLogFileOpen()
 
 
 // Logs a message with a default level (verbose)
-void Logger::log(string message)
+void Logger::log(std::string message)
 {
 	log(message, VERBOSE);
 }
@@ -103,14 +101,14 @@ void Logger::log(string message)
 
 
 // Logs a message with the given level
-void Logger::log(string message, LogLevel level)
+void Logger::log(std::string message, LogLevel level)
 {
 	if(level <= log_level)
 	{
 		if(log_to_console)
 		{
-			cout << "[" << getTimestamp() << "] ";
-			cout << message << "\n";
+			std::cout << "[" << getTimestamp() << "] ";
+			std::cout << message << "\n";
 		}
 		if(log_to_file)
 		{
@@ -123,14 +121,14 @@ void Logger::log(string message, LogLevel level)
 
 
 // Gets a timestamp. Used in log()
-string Logger::getTimestamp()
+std::string Logger::getTimestamp()
 {
 	// Get time and convert it to local time
 	time_t now = time(0);
 	tm *ltime = localtime(&now);
 
 	// Format local time as a string
-	string output = fmt::format("{:02d}:{:02d}:{:02d}",
+	std::string output = fmt::format("{:02d}:{:02d}:{:02d}",
 					ltime->tm_hour, ltime->tm_min, ltime->tm_sec);
 
 	return output;
