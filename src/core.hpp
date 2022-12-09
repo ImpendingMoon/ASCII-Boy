@@ -31,7 +31,8 @@
 #endif
 
 // External Libraries //
-#include <fmt/core.h>
+#define FMT_HEADER_ONLY
+#include "../lib/fmt/core.h"
 
 // Utils //
 #include "util/emath.hpp"
