@@ -21,6 +21,7 @@
 #include <chrono>
 #include <array>
 #include <cstdint>
+#include <vector>
 
 // Windows Libraries //
 #ifdef _WIN32
