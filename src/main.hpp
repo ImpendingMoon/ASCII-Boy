@@ -4,7 +4,7 @@
  AUTHOR : ImpendingMoon
  EDITORS: ImpendingMoon,
  CREATED: 3 Dec 2022
- EDITED : 3 Dec 2022
+ EDITED : 9 Dec 2022
  ******************************************************************************/
 
 /******************************************************************************
@@ -14,3 +14,4 @@
 #pragma once
 
 #include "core.hpp"
+#include "emu/gbsystem.hpp"

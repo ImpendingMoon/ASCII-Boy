@@ -44,11 +44,12 @@ public:
 	int getERAMIndex();
 
 	// Sets ROM1 to an array of bytes
-	void setROM1(std::array<uint8_t, 0x4000> bank);
+	void setROM1(std::array<uint8_t, 0x4000>& bank);
 	// Sets ROM2 to a 2D array of bytes
-	void setROM2(uint8_t** banks, int bank_amount);
-	// Sets the amount of ERAM banks avaliable
-	void setERAMAmount(int bank_amount);
+	void setROM2(std::vector<std::array<uint8_t, 0x4000>>& banks,
+				 int bank_amount);
+	// Sets and initializes ERAM
+	void setERAM(int bank_amount, bool persistent, std::string sav_file_path);
 
 	// Sets the ORAM_locked state
 	void setOAMLocked(bool value);
@@ -64,34 +65,44 @@ public:
 
 private:
 	// Memory banks
-	std::array<uint8_t, 0x4000> ROM1; // Static ROM $0000-$3FFF
+	std::array<uint8_t, 0x4000> ROM1{}; // Static ROM $0000-$3FFF
 
-	// Cannot easily make a pointer to an std::array of unknown size.
-	uint8_t** ROM2; // Banked ROM $4000-$7FFF
+	std::vector< std::array<uint8_t, 0x4000> > ROM2{}; // Banked ROM $4000-$7FFF
 	int ROM2_index; // Which ROM2 bank the MMU uses
-	int ROM2_bank_amount; // Amount of ROM banks that exist
+	int ROM2_bank_amount{}; // Amount of ROM banks that exist
 
-	std::array<uint8_t, 0x4000> VRAM; // VRAM $8000-$9FFF
+	std::array<uint8_t, 0x4000> VRAM{}; // VRAM $8000-$9FFF
 
-	// External RAM $A000-BFFF. Handled by Cartridge
+	// External RAM $A000-BFFF.
+	// Either a file on disk if persistent, or just an array if not.
+	std::string sav_file_path;
+	std::ifstream SavFile;
+	bool ERAM_persistent;
+	// NOTE: This probably shouldn't be initialized if ERAM_persistent
+	std::array<uint8_t, 0x2000> ERAM{};
 	int ERAM_index; // Which ERAM bank the MMU uses
-	int ERAM_bank_amount; // Amount of ERAM banks that exist
+	int ERAM_bank_amount{}; // Amount of ERAM banks that exist
 
-	std::array<uint8_t, 0x2000> WRAM; // Work RAM $C000-$DFFF
+	std::array<uint8_t, 0x2000> WRAM{}; // Work RAM $C000-$DFFF
 
 	// Echo RAM $E000-$FDFF
 	
-	std::array<uint8_t, 0x100> OAM; // Object Attribute Memory $FE00-$FE9F
+	std::array<uint8_t, 0x100> OAM{}; // Object Attribute Memory $FE00-$FE9F
 
 	// Unmapped memory $FEA0-FEFF
 	
-	std::array<uint8_t, 0x80> IOReg; // I/O Registers $FF00-$FF7F
+	std::array<uint8_t, 0x80> IOReg{}; // I/O Registers $FF00-$FF7F
 					  
-	std::array<uint8_t, 0x80> HRAM; // HRAM $FF80-$FFFE
+	std::array<uint8_t, 0x80> HRAM{}; // HRAM $FF80-$FFFE
 					 
 	uint8_t IEReg; // Interrupt Enable Register $FFFF
 
 	// ORAM and VRAM access is locked during some PPU states
 	bool OAM_locked;
 	bool VRAM_locked;
+
+	// Reads a byte from external RAM
+	uint8_t readERAMByte(int bank, uint16_t address);
+	// Writes a byte to external RAM
+	void writeERAMByte(int bank, uint16_t address, uint8_t value);
 };

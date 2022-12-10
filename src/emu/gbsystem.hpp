@@ -17,6 +17,7 @@
 
 #include "cpu.hpp"
 #include "mmu.hpp"
+#include "cart.hpp"
 
 class GBSystem
 {
@@ -29,6 +30,7 @@ public:
 
 	CPU cpu;
 	MMU mem;
+	Cartridge* cart;
 
 
 private:

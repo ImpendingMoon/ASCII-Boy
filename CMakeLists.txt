@@ -15,11 +15,17 @@ add_executable(
 	${SRC_DIR}/emu/gbsystem.cpp
 	${SRC_DIR}/emu/cpu.cpp
 	${SRC_DIR}/emu/mmu.cpp
-)
+	${SRC_DIR}/emu/cart.cpp
+	)
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${LIB_DIR})
 
-target_compile_options(${PROJECT_NAME} PUBLIC -Wall -g)
+target_compile_options(${PROJECT_NAME} PUBLIC
+		-Wall
+		-g
+		-static
+		-static-libgcc
+		-static-libstdc++)
 # ASCII-Boy makes use of C++17 features.
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_EXTENSIONS OFF)

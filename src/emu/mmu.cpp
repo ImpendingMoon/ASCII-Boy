@@ -4,7 +4,7 @@
  AUTHOR : ImpendingMoon
  EDITORS: ImpendingMoon,
  CREATED: 3 Dec 2022
- EDITED : 7 Dec 2022
+ EDITED : 9 Dec 2022
  ******************************************************************************/
 
 /******************************************************************************
@@ -17,14 +17,15 @@
 // Constructor
 MMU::MMU()
 {
-	// ROM banks are handled by the cartridge when loading a ROM file
-	ROM2 = nullptr;
 	ROM2_index = 0;
+	ROM2_bank_amount = 0;
 	ERAM_index = 0;
+	ERAM_bank_amount = 0;
 
 	// Initialize memory
 	// This isn't required, but makes logging and debugging easier
 	ROM1.fill(0);
+	ERAM.fill(0);
 	VRAM.fill(0);
 	WRAM.fill(0);
 	OAM.fill(0);
@@ -36,11 +37,7 @@ MMU::MMU()
 }
 
 // Destructor
-MMU::~MMU()
-{
-	// Maybe unneeded. If this causes a Segfault while closing, delete this.
-	delete ROM2;
-}
+MMU::~MMU() = default;
 
 
 // SGetters //
@@ -94,17 +91,28 @@ bool MMU::getVRAMLocked()
 }
 
 // Sets ROM1 to an array of bytes
-void MMU::setROM1(std::array<uint8_t, 0x4000> bank)
+void MMU::setROM1(std::array<uint8_t, 0x4000>& bank)
 {
 	// Copy the passed bank into ROM1 so that the Cartridge can free its memory
 	std::copy(bank.begin(), bank.end(), ROM1.begin());
 }
 
 // Sets ROM2 to a 2D array of bytes
-void MMU::setROM2(uint8_t** banks, int bank_amount)
+void MMU::setROM2(std::vector<std::array<uint8_t, 0x4000>>& banks,
+				  int bank_amount)
 {
 	ROM2 = banks;
 	ROM2_bank_amount = bank_amount;
+}
+
+// Sets and initializes ERAM
+void MMU::setERAM(int bank_amount, bool persistent, std::string sav_file_path)
+{
+	ERAM_bank_amount = bank_amount;
+	ERAM_persistent = persistent;
+	this->sav_file_path = sav_file_path;
+
+	// TODO: Create/Open SAV File if persistent
 }
 
 // End SGetters //
@@ -140,10 +148,10 @@ uint8_t MMU::readByte(uint16_t address, bool is_ppu)
 	// Check for unmapped memory
 	if(address >= 0xFEA0 && address <= 0xFEFF)
 	{
-		return 0xFF; // Usually returns 0xFF from the bus on hardware
 		Logger::instance().log(
 				"MEM: Attempted read of undefined memory.",
 				Logger::DEBUG);
+		return 0xFF; // Usually returns 0xFF from the bus on hardware
 	}
 
 	// ROM1
@@ -198,8 +206,8 @@ uint8_t MMU::readByte(uint16_t address, bool is_ppu)
 			return 0xFF;
 		}
 
-		// TODO: Interface with Cartridge
-		return 0xFF;
+		uint16_t relative_address = address - 0xA000;
+		return readERAMByte(ERAM_index, relative_address);
 	}
 
 	// WRAM
@@ -344,7 +352,9 @@ void MMU::writeByte(uint16_t address, uint8_t value, bool is_ppu)
 			return;
 		}
 
-		// TODO: Interface with Cartridge
+		uint16_t relative_address = address - 0xA000;
+		writeERAMByte(ERAM_index, relative_address, value);
+
 		return;
 	}
 
@@ -456,8 +466,8 @@ uint8_t MMU::getByte(uint16_t address)
 			return 0x00;
 		}
 
-		// TODO: Interface with Cartridge
-		return 0x00;
+		uint16_t relative_address = address - 0xA000;
+		return readERAMByte(ERAM_index, relative_address);
 	}
 
 	// WRAM
@@ -508,10 +518,27 @@ uint8_t MMU::getByte(uint16_t address)
 
 
 
+// Reads a byte from external RAM
+uint8_t MMU::readERAMByte(int bank, uint16_t address)
+{
+	// TODO
+	return 0x00;
+}
+
+
+
+// Writes a byte to external RAM
+void MMU::writeERAMByte(int bank, uint16_t address, uint8_t value)
+{
+	// TODO
+}
+
+
+
 // Dumps the entire memory address space into a formatted string.
 std::string MMU::dumpMemory()
 {
-	std::string output = "";
+	std::string output{};
 
 	output.append("--BEGIN MEMORY DUMP--\n");
 

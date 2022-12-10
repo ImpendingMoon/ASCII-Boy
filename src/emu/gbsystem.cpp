@@ -16,7 +16,6 @@
 // Constructor
 GBSystem::GBSystem(std::string rom_file_path)
 {
-
 	internal_speed = 4194304; // GB always starts out in standard speed mode
 
 	// Check if ROM file path exists and is accessable
@@ -27,9 +26,11 @@ GBSystem::GBSystem(std::string rom_file_path)
 
 	this->rom_file_path = rom_file_path;
 
+	cart = new Cartridge(rom_file_path, &mem);
 }
 
 // Destructor
 GBSystem::~GBSystem()
 {
+	delete cart;
 }

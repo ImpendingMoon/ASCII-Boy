@@ -4,7 +4,7 @@
  AUTHOR : ImpendingMoon
  EDITORS: ImpendingMoon,
  CREATED: 3 Dec 2022
- EDITED : 3 Dec 2022
+ EDITED : 9 Dec 2022
  ******************************************************************************/
 
 /******************************************************************************
@@ -17,10 +17,14 @@ int main()
 {
 	Logger::instance().log("ASCII-Boy Starting.", Logger::VERBOSE);
 
+	// Debug Stuff. Dump your own ROMs, kids.
+	GBSystem* gb = new GBSystem("./roms/Tetris.gb");
 
-	// TODO: Stuff
+	Logger::instance().log(gb->mem.dumpMemory(), Logger::DEBUG);
 
 	Logger::instance().log("ASCII-Boy Exiting.", Logger::VERBOSE);
+
+	delete gb;
 
 	return 0;
 }
