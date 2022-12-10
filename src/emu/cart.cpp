@@ -145,13 +145,13 @@ void Cartridge::loadROM(MMU *mem)
 		Logger::instance().log(ex.what(), Logger::ERRORS);
 
 		// Rethrow with more descriptive message
-		throw std::ios::failure("ROM is corrupt: Could not read ROM Header.");
+		throw std::runtime_error("ROM is corrupt: Could not read ROM Header.");
 	}
 
 	// Check the validity of the ROM's header
 	if(!isHeaderValid(header))
 	{
-		throw std::ios::failure("ROM is corrupt: Bad header checksum.");
+		throw std::runtime_error("ROM is corrupt: Bad header checksum.");
 	}
 
 	game_title = parseGameTitle(header);
@@ -184,6 +184,10 @@ void Cartridge::loadROM(MMU *mem)
 	case 0x06: rom_bank_amount = 128; break;
 	case 0x07: rom_bank_amount = 256; break;
 	case 0x08: rom_bank_amount = 512; break;
+	default:
+	{
+		throw std::runtime_error("ROM is corrupt: Invalid ROM size in header.");
+	}
 	// 0x52, 0x53, and 0x54 might exist, but probably don't.
 	}
 
@@ -195,6 +199,10 @@ void Cartridge::loadROM(MMU *mem)
 	case 0x03: ram_bank_amount = 4; break;
 	case 0x04: ram_bank_amount = 16; break;
 	case 0x05: ram_bank_amount = 8; break;
+	default:
+	{
+		throw std::runtime_error("ROM is corrupt: Invalid RAM size in header.");
+	}
 	}
 
 	// Send Save file info to MMU
@@ -210,7 +218,7 @@ void Cartridge::loadROM(MMU *mem)
 
 	} catch(std::exception& ex) {
 
-		throw std::ios::failure("ROM is corrupt: Could not read static ROM");
+		throw std::runtime_error("ROM is corrupt: Could not read static ROM");
 	}
 
 	// Load ROM banks into memory
@@ -226,7 +234,7 @@ void Cartridge::loadROM(MMU *mem)
 			rom_banks.push_back(bank);
 
 		} catch(std::exception& ex) {
-			throw std::ios::failure(
+			throw std::runtime_error(
 					"ROM is corrupt: Could not read all ROM banks.");
 		}
 	}
@@ -267,7 +275,7 @@ std::string Cartridge::parseGameTitle(std::array<uint8_t, 80>& header)
 	std::string title;
 	// The game title is stored in ASCII at location $133-$143, usually.
 	std::copy(header.begin() + 0x34,
-			  header.begin() + 0x43,
+			  header.begin() + 0x43 + 1,
 			  std::back_inserter(title)
 			  );
 

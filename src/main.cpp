@@ -26,5 +26,5 @@ int main()
 
 	delete gb;
 
-	return 0;
+	exit(0);
 }

@@ -4,7 +4,7 @@
  AUTHOR : ImpendingMoon
  EDITORS: ImpendingMoon,
  CREATED: 3 Dec 2022
- EDITED : 7 Dec 2022
+ EDITED : 9 Dec 2022
  ******************************************************************************/
 
 /******************************************************************************
@@ -15,7 +15,6 @@
 
 #include "../core.hpp"
 
-class Cartridge;
 class MMU
 {
 public:
@@ -30,9 +29,6 @@ public:
 	void writeByte(uint16_t address, uint8_t value);
 	// Writes a byte to memory, ignoring PPU locks
 	void writeByte(uint16_t address, uint8_t value, bool is_ppu);
-
-	// Reads a byte from memory, without logging. For dumping memory.
-	uint8_t getByte(uint16_t address);
 
 	// Sets the current ROM2 bank
 	void setROM2Index(int index);
@@ -100,6 +96,9 @@ private:
 	// ORAM and VRAM access is locked during some PPU states
 	bool OAM_locked;
 	bool VRAM_locked;
+
+	// Reads a byte from memory, without logging. For dumping memory.
+	inline uint8_t getByte(uint16_t address);
 
 	// Reads a byte from external RAM
 	uint8_t readERAMByte(int bank, uint16_t address);

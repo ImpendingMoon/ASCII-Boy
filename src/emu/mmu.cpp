@@ -21,6 +21,7 @@ MMU::MMU()
 	ROM2_bank_amount = 0;
 	ERAM_index = 0;
 	ERAM_bank_amount = 0;
+	ERAM_persistent = false;
 
 	// Initialize memory
 	// This isn't required, but makes logging and debugging easier
@@ -106,11 +107,11 @@ void MMU::setROM2(std::vector<std::array<uint8_t, 0x4000>>& banks,
 }
 
 // Sets and initializes ERAM
-void MMU::setERAM(int bank_amount, bool persistent, std::string sav_file_path)
+void MMU::setERAM(int bank_amount, bool persistent, std::string sav_path)
 {
 	ERAM_bank_amount = bank_amount;
 	ERAM_persistent = persistent;
-	this->sav_file_path = sav_file_path;
+	sav_file_path = sav_path;
 
 	// TODO: Create/Open SAV File if persistent
 }
@@ -412,7 +413,7 @@ void MMU::writeByte(uint16_t address, uint8_t value, bool is_ppu)
 
 
 // Reads a byte from memory, without logging. For dumping memory.
-uint8_t MMU::getByte(uint16_t address)
+inline uint8_t MMU::getByte(uint16_t address)
 {
 	// Check for ECHO RAM
 	if(address >= 0xE000 && address <= 0xFDFF)
