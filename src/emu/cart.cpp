@@ -14,7 +14,7 @@
 #include "cart.hpp"
 
 // Constructor
-Cartridge::Cartridge(std::string rom_file_path, MMU *mem)
+Cartridge::Cartridge(const std::string& rom_file_path, MMU& mem)
 {
 	this->rom_file_path = rom_file_path;
 	this->sav_file_path = "";
@@ -87,7 +87,7 @@ int Cartridge::getRAMBankAmount()
 
 
 // Loads the RomFile from the rom_file_path
-void Cartridge::loadROM(MMU *mem)
+void Cartridge::loadROM(MMU& mem)
 {
 	// Read the ROM's header into a byte array
 	std::array<uint8_t, 80> header{}; // Header is 80 bytes between $100-$14F
@@ -164,7 +164,7 @@ void Cartridge::loadROM(MMU *mem)
 	}
 
 	// Send Save file info to MMU
-	mem->setERAM(ram_bank_amount, persistent, sav_file_path, mbc_id);
+	mem.setERAM(ram_bank_amount, persistent, sav_file_path, mbc_id);
 
 
 	// Begin loading ROM data into MMU
@@ -172,7 +172,7 @@ void Cartridge::loadROM(MMU *mem)
 		std::array<uint8_t, 0x4000> static_rom{};
 		RomFile.read((char*)(static_rom.data()), static_rom.size());
 
-		mem->setROM1(static_rom);
+		mem.setROM1(static_rom);
 
 	} catch(std::exception& ex) {
 
@@ -198,7 +198,7 @@ void Cartridge::loadROM(MMU *mem)
 	}
 
 	// Send banks to MMU
-	mem->setROM2(rom_banks, rom_bank_amount);
+	mem.setROM2(rom_banks, rom_bank_amount);
 }
 
 

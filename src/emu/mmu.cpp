@@ -23,14 +23,6 @@ MMU::MMU()
 	ERAM_bank_amount = 0;
 	ERAM_persistent = false;
 	mbc = 0;
-
-	// Initialize memory
-	// This isn't required, but makes logging and debugging easier
-	ROM1.fill(0);
-	VRAM.fill(0);
-	WRAM.fill(0);
-	OAM.fill(0);
-	IOReg.fill(0);
 	IEReg = 0;
 
 	OAM_locked = false;

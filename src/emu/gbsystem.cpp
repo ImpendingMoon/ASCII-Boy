@@ -26,7 +26,7 @@ GBSystem::GBSystem(std::string rom_file_path)
 
 	this->rom_file_path = rom_file_path;
 
-	cart = new Cartridge(rom_file_path, &mem);
+	cart = new Cartridge(rom_file_path, mem);
 }
 
 // Destructor

@@ -22,7 +22,7 @@ class Cartridge
 {
 public:
 	// Constructor
-	Cartridge(std::string rom_file_path, MMU* mem);
+	Cartridge(const std::string& rom_file_path, MMU& mem);
 	// Destructor
 	virtual ~Cartridge();
 
@@ -49,7 +49,7 @@ private:
 	int mbc_id;
 
 	// Loads the RomFile from the rom_file_path
-	void loadROM(MMU* mem);
+	void loadROM(MMU& mem);
 	// Returns if the ROM header of the RomFile is valid.
 	static bool isHeaderValid(std::array<uint8_t, 80>& header);
 	// Gets the game title from the ROM header
