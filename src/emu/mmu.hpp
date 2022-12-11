@@ -14,6 +14,7 @@
 #pragma once
 
 #include "../core.hpp"
+#include "gbstructs.hpp"
 
 class MMU
 {
@@ -45,7 +46,10 @@ public:
 	void setROM2(std::vector<std::array<uint8_t, 0x4000>>& banks,
 				 int bank_amount);
 	// Sets and initializes ERAM
-	void setERAM(int bank_amount, bool persistent, std::string sav_file_path);
+	void setERAM(int bank_amount,
+				 bool persistent,
+				 std::string sav_file_path,
+				 int mbc_id);
 
 	// Sets the ORAM_locked state
 	void setOAMLocked(bool value);
@@ -73,6 +77,7 @@ private:
 	// Either a file on disk if persistent, or just an array if not.
 	std::string sav_file_path;
 	// TODO: This should be a memory mapped file instead.
+	int mbc;
 	std::fstream SavFile;
 	bool ERAM_persistent;
 	std::vector< std::array<uint8_t, 0x2000> > ERAM{};

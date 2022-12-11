@@ -13,49 +13,6 @@
 
 #include "cart.hpp"
 
-// This enum is mostly used for logging. It isn't even good at it. Too bad!
-enum BankController
-{
-	// Equality given to match header value
-
-	NONE = 0x00, // No additional banks.
-	NONE_RAM = 0x08, // RAM
-	NONE_BAT_RAM = 0x09, // Battery RAM
-
-	MBC1 = 0x01, // Up to 2MiB ROM, 32KiB RAM
-	MBC1_RAM = 0x02, // MBC1 with RAM
-	MBC1_BAT_RAM = 0x03, // MBC1 with Battery RAM
-
-	MBC2 = 0x05, // Up to 256KiB ROM, 256 bytes of mapped memory(?)
-	MBC2_BAT = 0x06, //
-
-	MBC3 = 0x11, // Up to 2MiB ROM, 32KiB RAM, Additional Timer
-	MBC3_RAM = 0x12, // MBC3 with RAM
-	MBC3_BAT_RAM = 0x13, // MBC3 with Battery RAM
-	MBC3_BAT_TIMER = 0x0F, // MBC3 with Battery + Timer
-	MBC3_BAT_RAM_TIMER = 0x10, // MBC3 with Battery + RAM + Timer
-
-	// MBC4 does not exist.
-
-	MBC5 = 0x19, // Up to 8MiB ROM
-	MBC5_RAM = 0x1A, // MBC5 with RAM
-	MBC5_BAT_RAM = 0x1B, // MBC5 with Battery RAM
-	MBC5_RUMBLE = 0x1C, // MBC5 with Rumble (rumble not emulated)
-	MBC5_RUMBLE_RAM = 0x1D, // MBC5 with Rumble and RAM
-	MBC5_RUMBLE_BAT_RAM = 0x1E, // MBC5 with Rumble, Battery, and RAM
-
-	MBC6 = 0x20, // Used in one game that can't be emulated anyway
-
-	// MBC7 is used for an accelerometer, which I don't plan on emulating.
-	// I will not be emulating MMM or M161 cartridges -IM
-
-	HuC1 = 0xFF, // Seems easy enough to emulate, if I ever find the documentation.
-	HuC3 = 0xFE, // Alongside banking, contains a RTC, speaker, and IR Blaster/Reciever. Fancy.
-	// Not emulating Wisdom Tree MBC
-	// Not emulating BANDAI TAMA5
-	// Probably not emulating GB Camera
-};
-
 // Constructor
 Cartridge::Cartridge(std::string rom_file_path, MMU *mem)
 {
@@ -161,9 +118,10 @@ void Cartridge::loadROM(MMU *mem)
 
 	// Check to see if external RAM is persistent
 	bool persistent = false;
-
 	switch(mbc_id)
 	{
+	using namespace gbstructs;
+
 	case NONE_BAT_RAM: case MBC1_BAT_RAM: case MBC2_BAT: case MBC3_BAT_RAM:
 	case MBC3_BAT_RAM_TIMER: case MBC5_BAT_RAM: case MBC5_RUMBLE_BAT_RAM:
 	{
@@ -206,7 +164,7 @@ void Cartridge::loadROM(MMU *mem)
 	}
 
 	// Send Save file info to MMU
-	mem->setERAM(ram_bank_amount, persistent, sav_file_path);
+	mem->setERAM(ram_bank_amount, persistent, sav_file_path, mbc_id);
 
 
 	// Begin loading ROM data into MMU

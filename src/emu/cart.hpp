@@ -15,6 +15,7 @@
 #pragma once
 
 #include "../core.hpp"
+#include "gbstructs.hpp"
 #include "mmu.hpp" // Cartridge loads directly into an MMU
 
 class Cartridge

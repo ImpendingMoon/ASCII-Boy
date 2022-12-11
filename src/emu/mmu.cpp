@@ -22,6 +22,7 @@ MMU::MMU()
 	ERAM_index = 0;
 	ERAM_bank_amount = 0;
 	ERAM_persistent = false;
+	mbc = 0;
 
 	// Initialize memory
 	// This isn't required, but makes logging and debugging easier
@@ -109,11 +110,15 @@ void MMU::setROM2(std::vector<std::array<uint8_t, 0x4000>>& banks,
 }
 
 // Sets and initializes ERAM
-void MMU::setERAM(int bank_amount, bool persistent, std::string sav_path)
+void MMU::setERAM(int bank_amount,
+				  bool persistent,
+				  std::string sav_path,
+				  int mbc_id)
 {
 	ERAM_bank_amount = bank_amount;
 	ERAM_persistent = persistent;
 	sav_file_path = sav_path;
+	mbc = mbc_id;
 
 	if(ERAM_persistent)
 	{
@@ -319,6 +324,8 @@ void MMU::writeByte(uint16_t address, uint8_t value)
 // Writes a byte to memory, can ignore PPU locks
 void MMU::writeByte(uint16_t address, uint8_t value, bool is_ppu)
 {
+	// TODO: Handle writes to ROM as MBC controls
+
 	Logger::instance().log(
 			fmt::format("MEM: Writing value 0x{:02X} to ${:04X}.",
 						value, address),
