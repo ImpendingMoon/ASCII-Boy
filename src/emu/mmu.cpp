@@ -4,7 +4,7 @@
  AUTHOR : ImpendingMoon
  EDITORS: ImpendingMoon,
  CREATED: 3 Dec 2022
- EDITED : 9 Dec 2022
+ EDITED : 11 Dec 2022
  ******************************************************************************/
 
 /******************************************************************************
@@ -12,7 +12,6 @@
  ******************************************************************************/
 
 #include "mmu.hpp"
-
 
 // Constructor
 MMU::MMU()
@@ -104,7 +103,7 @@ void MMU::setROM2(std::vector<std::array<uint8_t, 0x4000>>& banks,
 // Sets and initializes ERAM
 void MMU::setERAM(int bank_amount,
 				  bool persistent,
-				  std::string sav_path,
+				  const std::string& sav_path,
 				  int mbc_id)
 {
 	ERAM_bank_amount = bank_amount;

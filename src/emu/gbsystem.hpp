@@ -4,7 +4,7 @@
  AUTHOR : ImpendingMoon
  EDITORS: ImpendingMoon,
  CREATED: 3 Dec 2022
- EDITED : 7 Dec 2022
+ EDITED : 11 Dec 2022
  ******************************************************************************/
 
 /******************************************************************************
@@ -23,15 +23,16 @@ class GBSystem
 {
 public:
 	// Constructor
-	GBSystem(std::string rom_file_path);
+	GBSystem(const std::string& rom_file_path);
 	// Destructor
 	virtual ~GBSystem();
 
-
 	CPU cpu;
 	MMU mem;
-	Cartridge* cart;
+	std::unique_ptr<Cartridge> cart;
 
+	// Steps the system by one CPU instruction
+	void step();
 
 private:
 	std::string rom_file_path; // Full file path for the GB ROM

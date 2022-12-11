@@ -4,7 +4,7 @@
  AUTHOR : ImpendingMoon
  EDITORS: ImpendingMoon,
  CREATED: 3 Dec 2022
- EDITED : 9 Dec 2022
+ EDITED : 11 Dec 2022
  ******************************************************************************/
 
 /******************************************************************************
@@ -48,7 +48,7 @@ public:
 	// Sets and initializes ERAM
 	void setERAM(int bank_amount,
 				 bool persistent,
-				 std::string sav_file_path,
+				 const std::string& sav_file_path,
 				 int mbc_id);
 
 	// Sets the ORAM_locked state

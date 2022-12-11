@@ -4,7 +4,7 @@
  AUTHOR : ImpendingMoon
  EDITORS: ImpendingMoon,
  CREATED: 9 Dec 2022
- EDITED : 9 Dec 2022
+ EDITED : 11 Dec 2022
  ******************************************************************************/
 
 /******************************************************************************
@@ -14,10 +14,10 @@
 #include "cart.hpp"
 
 // Constructor
-Cartridge::Cartridge(const std::string& rom_file_path, MMU& mem)
+Cartridge::Cartridge(const std::string& rom_path, MMU& mem)
 {
-	this->rom_file_path = rom_file_path;
-	this->sav_file_path = "";
+	rom_file_path = rom_path;
+	sav_file_path = "";
 	rom_bank_amount = 0;
 	ram_bank_amount = 0;
 	mbc_id = 0;

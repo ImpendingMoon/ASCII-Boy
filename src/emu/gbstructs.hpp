@@ -4,7 +4,7 @@
  AUTHOR : ImpendingMoon
  EDITORS: ImpendingMoon,
  CREATED: 3 Dec 2022
- EDITED : 7 Dec 2022
+ EDITED : 11 Dec 2022
  ******************************************************************************/
 
 /******************************************************************************
@@ -70,6 +70,8 @@ namespace gbstructs
 		uint8_t flagsToByte();
 	};
 
+	// Converts an instruction to a string
+	std::string instructionToString();
 
 	// Used to generalize targets for instructions. Also useful for logging.
 	enum TargetID
@@ -78,6 +80,20 @@ namespace gbstructs
 		A, F, B, C, D, E, H, L,
 		AF, BC, DE, HL,
 		SP, PC,
+	};
+
+	// Used almost entirely for logging. TargetIDs only slightly useful.
+	struct CPUInstruction
+	{
+		std::string mnemonic;
+		TargetID target1; // To
+		TargetID target2; // From
+		bool t1_as_address; // Use target1 as an address
+		bool t2_as_address; // Use target2 as an address
+
+		uint16_t origin; // Original address
+		uint16_t opcode;
+		bool two_byte; // Opcodes beginning with CB are two bytes long
 	};
 
 	// Used to indicate MBC controls and memory persistence
@@ -125,4 +141,9 @@ namespace gbstructs
 
 	// Converts enums to strings.
 	std::string enumToString(TargetID id);
+
+	// Creates a formatted string from a RegisterSet
+	std::string registerToString(RegisterSet regs);
+	// Creates a formatted string from a CPUInstruction
+	std::string instructionToString(CPUInstruction ins);
 }
