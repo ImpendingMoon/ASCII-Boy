@@ -26,7 +26,6 @@ MMU::MMU()
 	// Initialize memory
 	// This isn't required, but makes logging and debugging easier
 	ROM1.fill(0);
-	ERAM.fill(0);
 	VRAM.fill(0);
 	WRAM.fill(0);
 	OAM.fill(0);
@@ -38,7 +37,10 @@ MMU::MMU()
 }
 
 // Destructor
-MMU::~MMU() = default;
+MMU::~MMU()
+{
+	SavFile.close();
+}
 
 
 // SGetters //
@@ -113,7 +115,49 @@ void MMU::setERAM(int bank_amount, bool persistent, std::string sav_path)
 	ERAM_persistent = persistent;
 	sav_file_path = sav_path;
 
-	// TODO: Create/Open SAV File if persistent
+	if(ERAM_persistent)
+	{
+		// If persistent, open a .sav file for writing
+
+		// HACK: Figure out a better way to create the file if it doesn't exist.
+		std::ofstream temp(sav_file_path, std::fstream::out);
+		temp.close();
+
+		// Since this also uses the "in" flag, it will not create the file
+		SavFile.open(sav_file_path,
+					 std::fstream ::out
+					 | std::fstream::in
+					 | std::fstream::binary);
+		// Check to see that the file was created
+		if(!SavFile)
+		{
+			Logger::instance().log("MEM: Could not open .sav file! "
+								   "Saves will not be permanent!",
+								   Logger::ERRORS);
+		}
+
+		// Ensure that the .sav file is the correct size
+		uint64_t target_size = ERAM_bank_amount * 0x2000;
+		if(SavFile && std::filesystem::file_size(sav_file_path) < target_size)
+		{
+				std::filesystem::resize_file(sav_file_path, target_size);
+		}
+	}
+
+
+	// Use the volatile memory if the memory isn't persistent or the .sav file
+	// could not be opened/created.
+	if(!ERAM_persistent || !SavFile)
+	{
+		for(int i = 0; i < ERAM_bank_amount; i++)
+		{
+			// Every bank is an array of 0x2000 bytes
+			std::array<uint8_t, 0x2000> bank{};
+			bank.fill(0);
+			ERAM.push_back(bank);
+		}
+	}
+
 }
 
 // End SGetters //
@@ -522,8 +566,24 @@ inline uint8_t MMU::getByte(uint16_t address)
 // Reads a byte from external RAM
 uint8_t MMU::readERAMByte(int bank, uint16_t address)
 {
-	// TODO
-	return 0x00;
+	if(bank > ERAM_bank_amount)
+	{
+		Logger::instance().log("MEM: Attempted read of invalid ERAM bank.",
+							   Logger::DEBUG);
+		return 0xFF;
+	}
+
+	// If persistent, read from the SAV file
+	if(ERAM_persistent && SavFile)
+	{
+		int absolute_address = bank * address;
+
+		SavFile.seekg(absolute_address);
+		return SavFile.get();
+	}
+
+	// Otherwise, read from the vector
+	return ERAM[bank][address];
 }
 
 
@@ -531,7 +591,25 @@ uint8_t MMU::readERAMByte(int bank, uint16_t address)
 // Writes a byte to external RAM
 void MMU::writeERAMByte(int bank, uint16_t address, uint8_t value)
 {
-	// TODO
+	if(bank > ERAM_bank_amount)
+	{
+		Logger::instance().log("MEM: Attempted write of invalid ERAM bank.",
+							   Logger::DEBUG);
+		return;
+	}
+
+	// If persistent, write to the SAV file
+	if(ERAM_persistent && SavFile)
+	{
+		int absolute_address = bank * address;
+
+		SavFile.seekp(absolute_address);
+		SavFile.put((char)(value));
+		return;
+	}
+
+	// Otherwise, write to the vector
+	ERAM[bank][address] = value;
 }
 
 

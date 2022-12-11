@@ -72,10 +72,10 @@ private:
 	// External RAM $A000-BFFF.
 	// Either a file on disk if persistent, or just an array if not.
 	std::string sav_file_path;
-	std::ifstream SavFile;
+	// TODO: This should be a memory mapped file instead.
+	std::fstream SavFile;
 	bool ERAM_persistent;
-	// NOTE: This probably shouldn't be initialized if ERAM_persistent
-	std::array<uint8_t, 0x2000> ERAM{};
+	std::vector< std::array<uint8_t, 0x2000> > ERAM{};
 	int ERAM_index; // Which ERAM bank the MMU uses
 	int ERAM_bank_amount{}; // Amount of ERAM banks that exist
 
