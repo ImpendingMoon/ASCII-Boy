@@ -17,6 +17,7 @@
 #include <iostream>
 #include <fstream>
 #include <filesystem>
+#include <csignal>
 #include <string>
 #include <chrono>
 #include <thread>

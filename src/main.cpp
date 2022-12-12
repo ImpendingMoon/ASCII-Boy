@@ -13,23 +13,86 @@
 
 #include "main.hpp"
 
+// Debug Stuff. Dump your own ROMs, kids.
+auto gb = std::make_unique<GBSystem>("./roms/Tetris.gb");
+
 int main()
 {
-	Logger::instance().log("ASCII-Boy Starting.", Logger::VERBOSE);
+// Handle exit signals
+#ifdef _WIN32
+    // NOTE: This doesn't seem to work terribly well.
+    SetConsoleCtrlHandler(reinterpret_cast<PHANDLER_ROUTINE>(exitHandler), TRUE);
+#else
+    signal(SIGINT, exitHandler);
+#endif
 
-	// Debug Stuff. Dump your own ROMs, kids.
-	auto gb = std::make_unique<GBSystem>("./roms/Tetris.gb");
+    programState = RUNNING;
 
-	// For now, walk through 100 instructions
-	for(int i = 0; i < 100; i++)
-	{
-		gb->step();
-		std::this_thread::sleep_for(std::chrono::milliseconds(500));
-	}
+	Logger::instance().log("ASCII-Boy Started.", Logger::VERBOSE);
 
-	Logger::instance().log(gb->mem.dumpMemory(), Logger::DEBUG);
+    using std::this_thread::sleep_for;
+    using std::chrono::milliseconds;
 
-	Logger::instance().log("ASCII-Boy Exiting.", Logger::VERBOSE);
+    while(programState != EXITING)
+    {
+        // TODO: Input handling
+
+        switch(programState)
+        {
+        case RUNNING:
+        {
+            int cycles_per_frame = gb->getCyclesPerFrame();
+
+            for(int i = 0; i < cycles_per_frame; i++)
+            {
+                try {
+                    gb->step();
+                    sleep_for(milliseconds(100));
+
+                } catch(std::invalid_argument& ex) {
+
+                    Logger::instance().log(ex.what(), Logger::ERRORS);
+                }
+            }
+
+            break;
+        }
+
+        case PAUSED:
+        {
+            sleep_for(milliseconds(1));
+            break;
+        }
+
+        case STOPPED:
+        {
+            // Destroy the GBSystem and go to prompts/menu
+            gb.reset();
+
+            // TODO: Get user prompts
+        }
+
+        case EXITING:
+        {
+            break;
+        }
+
+        } // End Switch
+
+        // TODO: Rendering
+    }
 
 	exit(0);
+}
+
+
+// Safely exits the program when an exit signal is called
+void exitHandler(int signal)
+{
+    Logger::instance().log(gb->mem.dumpMemory(), Logger::DEBUG);
+
+    Logger::instance().log("ASCII-Boy exited with code " + signal,
+                           Logger::VERBOSE);
+
+    exit(0);
 }

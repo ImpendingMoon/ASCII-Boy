@@ -17,6 +17,7 @@
 GBSystem::GBSystem(const std::string& rom_path)
 {
 	internal_speed = 4194304; // GB always starts out in standard speed mode
+    cycles_per_frame = internal_speed / 59.7; // Close enough
 
 	// Check if ROM file path exists and is accessible
 	if(!std::filesystem::exists(rom_path))
@@ -48,4 +49,16 @@ void GBSystem::step()
 	{
 		// In terms of other components, we have no other components.
 	}
+}
+
+
+int GBSystem::getInternalSpeed()
+{
+    return internal_speed;
+}
+
+
+int GBSystem::getCyclesPerFrame()
+{
+    return cycles_per_frame;
 }

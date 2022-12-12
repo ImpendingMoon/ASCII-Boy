@@ -22,6 +22,9 @@
 class GBSystem
 {
 public:
+    static constexpr int GB_X_RES = 160;
+    static constexpr int GB_Y_RES = 144;
+
 	// Constructor
 	GBSystem(const std::string& rom_file_path);
 	// Destructor
@@ -34,9 +37,13 @@ public:
 	// Steps the system by one CPU instruction
 	void step();
 
+    int getInternalSpeed();
+    int getCyclesPerFrame();
+
 private:
 	std::string rom_file_path; // Full file path for the GB ROM
 
-	uint32_t internal_speed; // The processor speed in Hz
+	int internal_speed; // The processor speed in Hz
+    int cycles_per_frame; // This might be incorrect
 
 };
