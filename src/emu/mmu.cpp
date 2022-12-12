@@ -4,7 +4,7 @@
  AUTHOR : ImpendingMoon
  EDITORS: ImpendingMoon,
  CREATED: 3 Dec 2022
- EDITED : 11 Dec 2022
+ EDITED : 12 Dec 2022
  ******************************************************************************/
 
 /******************************************************************************
@@ -343,27 +343,19 @@ void MMU::writeByte(uint16_t address, uint8_t value, bool is_ppu)
 	// ROM1
 	if(address <= 0x3FFF)
 	{
-		ROM1[address] = value; // Guaranteed to be in-bounds
+		Logger::instance().log(
+				"MEM: Attempted write of ROM1.",
+				Logger::DEBUG);
 		return;
 	}
 
 	// ROM2
 	if(address >= 0x4000 && address <= 0x7FFF)
 	{
-		// Bounds checking
-		if(ROM2_index < 0 || ROM2_index >= ROM2_bank_amount)
-		{
-			Logger::instance().log(
-					"MEM: Attempted write to invalid ROM2 bank.",
-					Logger::DEBUG);
+		Logger::instance().log(
+				"MEM: Attempted write of ROM2.",
+				Logger::DEBUG);
 
-			return;
-		}
-
-		uint16_t relative_address = address - 0x4000;
-		
-		// Read byte at address in bank
-		ROM2[ROM2_index][relative_address] = value;
 		return;
 	}
 
@@ -422,6 +414,7 @@ void MMU::writeByte(uint16_t address, uint8_t value, bool is_ppu)
 		uint16_t relative_address = address - 0xFE00;
 
 		OAM[relative_address] = value;
+		return;
 	}
 
 	// IOReg
@@ -430,6 +423,7 @@ void MMU::writeByte(uint16_t address, uint8_t value, bool is_ppu)
 		uint16_t relative_address = address - 0xFF00;
 
 		IOReg[relative_address] = value;
+		return;
 	}
 
 	// HRAM
@@ -438,12 +432,14 @@ void MMU::writeByte(uint16_t address, uint8_t value, bool is_ppu)
 		uint16_t relative_address = address - 0xFF80;
 
 		HRAM[relative_address] = value;
+		return;
 	}
 
 	// IEReg
 	if(address == 0xFFFF)
 	{
 		IEReg = value;
+		return;
 	}
 
 	// This should not be an accessible branch.

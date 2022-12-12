@@ -4,7 +4,7 @@
  AUTHOR : ImpendingMoon
  EDITORS: ImpendingMoon,
  CREATED: 3 Dec 2022
- EDITED : 11 Dec 2022
+ EDITED : 12 Dec 2022
  ******************************************************************************/
 
 /******************************************************************************
@@ -80,6 +80,7 @@ namespace gbstructs
 		A, F, B, C, D, E, H, L,
 		AF, BC, DE, HL,
 		SP, PC,
+		IMMEDIATE,
 	};
 
 	// Used almost entirely for logging. TargetIDs only slightly useful.

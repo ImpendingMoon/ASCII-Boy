@@ -4,7 +4,7 @@
  AUTHOR : ImpendingMoon
  EDITORS: ImpendingMoon,
  CREATED: 3 Dec 2022
- EDITED : 11 Dec 2022
+ EDITED : 12 Dec 2022
  ******************************************************************************/
 
 /******************************************************************************
@@ -36,6 +36,7 @@ std::string gbstructs::enumToString(TargetID id)
 	case HL: output = "HL"; break;
 	case SP: output = "SP"; break;
 	case PC: output = "PC"; break;
+	case IMMEDIATE: output = "IMMEDIATE"; break;
 	}
 	return output;
 }
@@ -70,12 +71,40 @@ std::string gbstructs::instructionToString(CPUInstruction ins)
 	std::string output{};
 
 	output.append("(");
-	output.append("INS: " + ins.mnemonic + " | ");
-	output.append("Target1: " + enumToString(ins.target1) + " | ");
-	output.append("Target2: " + enumToString(ins.target2) + " | ");
-	output.append(fmt::format("T1 Address: {} | ", ins.t1_as_address));
-	output.append(fmt::format("T2 Address: {} | ", ins.t2_as_address));
+
+	// Format the string as it would be in a .asm file, more or less
+
+	std::string target1str{}, target2str{};
+
+	if(ins.target1 == NOTARGET) { target1str = ""; }
+	else if(ins.target1 == IMMEDIATE) { target1str = "n"; }
+	else { target1str = enumToString(ins.target1); }
+
+	if(ins.target2 == NOTARGET) { target2str = ""; }
+	else if(ins.target2 == IMMEDIATE) { target2str = "n"; }
+	else { target2str = enumToString(ins.target1); }
+
+	output.append("INS: " + ins.mnemonic + " ");
+	if(ins.t1_as_address)
+	{
+		output.append(fmt::format("({})", target1str));
+	} else if(ins.target1 != NOTARGET) {
+		output.append(fmt::format("{}", target1str));
+	}
+
+	if(ins.t2_as_address)
+	{
+		output.append(",");
+		output.append(fmt::format("({})", target2str));
+	} else if(ins.target2 != NOTARGET) {
+		output.append(",");
+		output.append(fmt::format("{}", target2str));
+	}
+
+	output.append(" | ");
+
 	output.append(fmt::format("Origin Address: ${:04X} | ", ins.origin));
+
 	if(ins.two_byte)
 	{
 		output.append(fmt::format("Opcode: 0x{:04X}", ins.opcode));
@@ -83,6 +112,13 @@ std::string gbstructs::instructionToString(CPUInstruction ins)
 		output.append(fmt::format("Opcode: 0x{:02X}", ins.opcode));
 	}
 	output.append(")");
+
+	// Old string logic
+//	output.append("INS: " + ins.mnemonic + " | ");
+//	output.append("Target1: " + enumToString(ins.target1) + " | ");
+//	output.append("Target2: " + enumToString(ins.target2) + " | ");
+//	output.append(fmt::format("T1 Address: {} | ", ins.t1_as_address));
+//	output.append(fmt::format("T2 Address: {} | ", ins.t2_as_address));
 
 	return output;
 }

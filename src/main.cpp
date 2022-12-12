@@ -4,7 +4,7 @@
  AUTHOR : ImpendingMoon
  EDITORS: ImpendingMoon,
  CREATED: 3 Dec 2022
- EDITED : 11 Dec 2022
+ EDITED : 12 Dec 2022
  ******************************************************************************/
 
 /******************************************************************************
@@ -51,8 +51,18 @@ int main()
 
                 } catch(std::invalid_argument& ex) {
 
-                    Logger::instance().log(ex.what(), Logger::ERRORS);
-                }
+                    Logger::instance().log(
+							fmt::format("!EXCEPTION!: {}", ex.what()),
+							Logger::ERRORS);
+
+                } catch(std::runtime_error& ex) {
+
+					Logger::instance().log(
+							fmt::format("!EXCEPTION!: {}", ex.what()),
+							Logger::ERRORS);
+
+					programState = STOPPED;
+				}
             }
 
             break;
@@ -70,6 +80,7 @@ int main()
             gb.reset();
 
             // TODO: Get user prompts
+			exit(0);
         }
 
         case EXITING:
