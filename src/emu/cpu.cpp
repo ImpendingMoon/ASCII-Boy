@@ -567,7 +567,7 @@ int CPU::execute(uint8_t opcode, MMU &mem)
 
 			if(ins.target1 != HL)
 			{
-				byte value = getByteReg(ins.target1);
+				uint8_t value = getByteReg(ins.target1);
 
 				bool old_lsb = value & 1;
 				value = (value >> 1) | (flags.carry << 7);
@@ -1022,11 +1022,11 @@ int CPU::execute(uint8_t opcode, MMU &mem)
 			default: break;
 		}
 
-		byte lsb = mem.readByte(regs.pc);
+		uint8_t lsb = mem.readByte(regs.pc);
 		regs.pc++;
 		cycles += 4;
 
-		byte msb = mem.readByte(regs.pc);
+		uint8_t msb = mem.readByte(regs.pc);
 		regs.pc++;
 		cycles += 4;
 
@@ -1087,10 +1087,10 @@ int CPU::execute(uint8_t opcode, MMU &mem)
 		ins.target2 = SP;
 
 		// Get address from immediate data
-		byte address_lsb = mem.readByte(regs.pc);
+		uint8_t address_lsb = mem.readByte(regs.pc);
 		regs.pc++;
 		cycles += 4;
-		byte address_msb = mem.readByte(regs.pc);
+		uint8_t address_msb = mem.readByte(regs.pc);
 		regs.pc++;
 		cycles += 4;
 
@@ -1219,7 +1219,7 @@ int CPU::execute(uint8_t opcode, MMU &mem)
 		}
 
 		regs.sp--;
-		byte lsb = getByteReg(ins.target2);
+		uint8_t lsb = getByteReg(ins.target2);
 		mem.writeByte(regs.sp, lsb);
 		cycles += 4;
 
@@ -1246,7 +1246,7 @@ int CPU::execute(uint8_t opcode, MMU &mem)
 		}
 
 		regs.sp++;
-		byte val = mem.readByte(regs.sp);
+		uint8_t val = mem.readByte(regs.sp);
 		cycles += 4;
 
 		setByteReg(ins.target1, val);
@@ -1487,10 +1487,10 @@ int CPU::execute(uint8_t opcode, MMU &mem)
 		ins.target2 = IMMEDIATE;
 
 		// Get Immediate value
-		byte lsb = mem.readByte(regs.pc);
+		uint8_t lsb = mem.readByte(regs.pc);
 		regs.pc++;
 		cycles += 4;
-		byte msb = mem.readByte(regs.pc);
+		uint8_t msb = mem.readByte(regs.pc);
 		regs.pc++;
 		cycles += 4;
 
@@ -1518,7 +1518,7 @@ int CPU::execute(uint8_t opcode, MMU &mem)
 		ins.mnemonic = "INC";
 
 		// Middle 3 bits define Target 1
-		ins.target1 = toTarget((byte) ((opcode & 0b00111000) >> 3));
+		ins.target1 = toTarget((opcode & 0b00111000) >> 3);
 
 		if (ins.target1 != HL) {
 			uint8_t sum = getByteReg(ins.target1);
@@ -1583,7 +1583,7 @@ int CPU::execute(uint8_t opcode, MMU &mem)
 		ins.mnemonic = "DEC";
 
 		// Middle 3 bits define Target 1
-		ins.target1 = toTarget((byte) ((opcode & 0b00111000) >> 3));
+		ins.target1 = toTarget((opcode & 0b00111000) >> 3);
 
 		if (ins.target1 != HL) {
 			uint8_t dif = getByteReg(ins.target1);
@@ -2067,7 +2067,7 @@ int CPU::execute(uint8_t opcode, MMU &mem)
 		ins.mnemonic = "RRA";
 		ins.target1 = A;
 
-		byte value = regs.a;
+		uint8_t value = regs.a;
 
 		bool old_lsb = value & 1;
 		value = (value >> 1) | (flags.carry << 7);
