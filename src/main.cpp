@@ -13,9 +13,6 @@
 
 #include "main.hpp"
 
-// Debug Stuff. Dump your own ROMs, kids.
-auto gb = std::make_unique<GBSystem>("./roms/Tetris.gb");
-
 int main()
 {
 // Handle exit signals
@@ -26,6 +23,12 @@ int main()
     signal(SIGINT, exitHandler);
 #endif
 
+    initProgram();
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+
+    exitProgram();
+
 	exit(0);
 }
 
@@ -33,7 +36,7 @@ int main()
 // Safely exits the program when an exit signal is called
 void exitHandler(int signal)
 {
-    Logger::instance().log(gb->mem.dumpMemory(), Logger::DEBUG);
+    // Logger::instance().log(gb->mem.dumpMemory(), Logger::DEBUG);
 
     Logger::instance().log("ASCII-Boy exited with code " + signal,
                            Logger::VERBOSE);

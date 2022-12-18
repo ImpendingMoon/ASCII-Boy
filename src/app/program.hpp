@@ -15,10 +15,13 @@
 
 #include "../core.hpp"
 #include "renderer.hpp"
+#include "../emu/gbsystem.hpp"
 
 enum ProgramState
 {
-    STOPPED, // Emulator is not running - at user prompts
+    MENU_MAIN, // Main menu
+    MENU_ROM, // Choosing a ROM file
+    MENU_CONF, // Configuration menu
     RUNNING, // Emulator is running
     PAUSED,  // Emulator is paused
     EXITING, // Program is preparing to exit

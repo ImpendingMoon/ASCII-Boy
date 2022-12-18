@@ -41,8 +41,6 @@
 // External Libraries //
 #define FMT_HEADER_ONLY
 #include "../lib/fmt/core.h"
-// NOTE: Untested on Windows. May need to use PDCurses.
-#include <ncurses.h>
 
 // Utils //
 #include "util/emath.hpp"

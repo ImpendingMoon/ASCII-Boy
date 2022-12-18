@@ -14,7 +14,7 @@
 #pragma once
 
 #include "core.hpp"
-#include "emu/gbsystem.hpp"
+#include "app/program.hpp"
 
 // Safely exits the program when an exit signal is called
 void exitHandler(int signal);

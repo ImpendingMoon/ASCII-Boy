@@ -14,12 +14,14 @@
 #pragma once
 
 #include "../core.hpp"
-
-constexpr uint64_t GB_X_RES = 160;
-constexpr uint64_t GB_Y_RES = 144;
+// NOTE: Untested on Windows. May need to use PDCurses.
+#include <ncurses.h>
 
 // Initializes the renderer
-void initRender();
+void initRenderer();
 
-// Exits the renderer
+// Renders to the screen
+void render();
+
+// Exits and cleans up ncurses
 void exitRenderer();
