@@ -4,7 +4,7 @@
  AUTHOR : ImpendingMoon
  EDITORS: ImpendingMoon,
  CREATED: 3 Dec 2022
- EDITED : 17 Dec 2022
+ EDITED : 18 Dec 2022
  ******************************************************************************/
 
 /******************************************************************************
@@ -21,6 +21,7 @@
 
 #include <string>
 #include <chrono>
+#include <functional>
 
 #include <array>
 #include <vector>

@@ -4,7 +4,7 @@
  AUTHOR : ImpendingMoon
  EDITORS: ImpendingMoon,
  CREATED: 17 Dec 2022
- EDITED : 17 Dec 2022
+ EDITED : 18 Dec 2022
  ******************************************************************************/
 
 /******************************************************************************
@@ -16,6 +16,9 @@
 #include "../core.hpp"
 // NOTE: Untested on Windows. May need to use PDCurses.
 #include <ncurses.h>
+
+constexpr uint64_t GB_X_RES = 160;
+constexpr uint64_t GB_Y_RES = 144;
 
 // Initializes the renderer
 void initRenderer();

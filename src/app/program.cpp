@@ -12,12 +12,14 @@
  ******************************************************************************/
 
 #include "program.hpp"
-using std::unique_ptr, std::make_unique;
 
+using std::unique_ptr, std::make_unique;
 
 ProgramState programState = MENU_MAIN;
 
 unique_ptr<GBSystem> gb{};
+
+MenuMain menuMain{};
 
 // Gets the current program state
 ProgramState getState()
@@ -41,6 +43,11 @@ void initProgram()
     Logger::initLogger();
     initRenderer();
     Logger::log("Program starting.", Logger::VERBOSE);
+
+    // Start at main menu
+    menuMain.initMenu();
+
+    render();
 }
 
 

@@ -4,7 +4,7 @@
  AUTHOR : ImpendingMoon
  EDITORS: ImpendingMoon,
  CREATED: 17 Dec 2022
- EDITED : 17 Dec 2022
+ EDITED : 18 Dec 2022
  ******************************************************************************/
 
 /******************************************************************************
@@ -12,9 +12,6 @@
  ******************************************************************************/
 
 #include "renderer.hpp"
-
-constexpr uint64_t GB_X_RES = 160;
-constexpr uint64_t GB_Y_RES = 144;
 
 // Initializes the renderer
 void initRenderer()
@@ -24,6 +21,7 @@ void initRenderer()
     resize_term(GB_Y_RES, GB_X_RES);
     wresize(stdscr, GB_Y_RES, GB_X_RES);
     // Enter RAW mode
+    raw();
     cbreak();
     noecho();
     // Handle special keys (backspace, shift, etc.)

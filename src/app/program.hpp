@@ -15,7 +15,10 @@
 
 #include "../core.hpp"
 #include "renderer.hpp"
+
 #include "../emu/gbsystem.hpp"
+
+#include "menus/menumain.hpp"
 
 enum ProgramState
 {
