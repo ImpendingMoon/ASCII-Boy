@@ -4,7 +4,7 @@
  AUTHOR : ImpendingMoon
  EDITORS: ImpendingMoon,
  CREATED: 3 Dec 2022
- EDITED : 11 Dec 2022
+ EDITED : 17 Dec 2022
  ******************************************************************************/
 
 /******************************************************************************
@@ -17,14 +17,18 @@
 #include <iostream>
 #include <fstream>
 #include <filesystem>
-#include <csignal>
+#include <thread>
+
 #include <string>
 #include <chrono>
-#include <thread>
+
 #include <array>
+#include <vector>
+
+// C Libraries //
+#include <csignal>
 #include <cstdint>
 #include <climits>
-#include <vector>
 
 // Windows Libraries //
 #ifdef _WIN32
@@ -37,6 +41,8 @@
 // External Libraries //
 #define FMT_HEADER_ONLY
 #include "../lib/fmt/core.h"
+// NOTE: Untested on Windows. May need to use PDCurses.
+#include <ncurses.h>
 
 // Utils //
 #include "util/emath.hpp"

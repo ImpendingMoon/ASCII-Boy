@@ -11,6 +11,8 @@ add_executable(
 	${SRC_DIR}/util/emath.cpp
 	${SRC_DIR}/util/logger.cpp
 	${SRC_DIR}/main.cpp
+	${SRC_DIR}/app/program.cpp
+	${SRC_DIR}/app/renderer.cpp
 	${SRC_DIR}/emu/gbstructs.cpp
 	${SRC_DIR}/emu/gbsystem.cpp
 	${SRC_DIR}/emu/cpu.cpp
@@ -18,14 +20,18 @@ add_executable(
 	${SRC_DIR}/emu/cart.cpp
 	)
 
-target_include_directories(${PROJECT_NAME} PRIVATE ${LIB_DIR})
+find_package(Curses REQUIRED)
 
+target_include_directories(${PROJECT_NAME} PRIVATE ${LIB_DIR} ${CURSES_INCLUDE_DIR})
+target_link_libraries(${PROJECT_NAME} ${CURSES_LIBRARIES})
+
+# TODO: Have separate Release and Debug options
 target_compile_options(${PROJECT_NAME} PUBLIC
 		-Wall
+		-O3
 		-g
-		-static
-		-static-libgcc
-		-static-libstdc++)
+		)
+
 # ASCII-Boy makes use of C++17 features.
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_EXTENSIONS OFF)

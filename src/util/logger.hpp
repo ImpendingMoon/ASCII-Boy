@@ -16,7 +16,7 @@
 #include <iostream>
 #include <fstream>
 #include <filesystem>
-#include <fmt/core.h>
+#include "../../lib/fmt/core.h"
 
 // Logger is a singleton that handles writing to console/logfile
 // NOTE: Creation is not thread-safe, but is called in main() before anything

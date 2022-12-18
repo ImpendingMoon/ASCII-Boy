@@ -4,7 +4,7 @@
  AUTHOR : ImpendingMoon
  EDITORS: ImpendingMoon,
  CREATED: 3 Dec 2022
- EDITED : 12 Dec 2022
+ EDITED : 17 Dec 2022
  ******************************************************************************/
 
 /******************************************************************************
@@ -25,73 +25,6 @@ int main()
 #else
     signal(SIGINT, exitHandler);
 #endif
-
-    programState = RUNNING;
-
-	Logger::instance().log("ASCII-Boy Started.", Logger::VERBOSE);
-
-    using std::this_thread::sleep_for;
-    using std::chrono::milliseconds;
-
-    while(programState != EXITING)
-    {
-        // TODO: Input handling
-
-        switch(programState)
-        {
-        case RUNNING:
-        {
-            int cycles_per_frame = gb->getCyclesPerFrame();
-
-            for(int i = 0; i < cycles_per_frame; i++)
-            {
-                try {
-                    gb->step();
-                    sleep_for(milliseconds(100));
-
-                } catch(std::invalid_argument& ex) {
-
-                    Logger::instance().log(
-							fmt::format("!EXCEPTION!: {}", ex.what()),
-							Logger::ERRORS);
-
-                } catch(std::runtime_error& ex) {
-
-					Logger::instance().log(
-							fmt::format("!EXCEPTION!: {}", ex.what()),
-							Logger::ERRORS);
-
-					programState = STOPPED;
-				}
-            }
-
-            break;
-        }
-
-        case PAUSED:
-        {
-            sleep_for(milliseconds(1));
-            break;
-        }
-
-        case STOPPED:
-        {
-            // Destroy the GBSystem and go to prompts/menu
-            gb.reset();
-
-            // TODO: Get user prompts
-			exit(0);
-        }
-
-        case EXITING:
-        {
-            break;
-        }
-
-        } // End Switch
-
-        // TODO: Rendering
-    }
 
 	exit(0);
 }

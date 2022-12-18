@@ -1,20 +1,14 @@
 /******************************************************************************
  PROJECT: ASCII-Boy
- PATH   : main.hpp
+ PATH   : app/renderer.cpp
  AUTHOR : ImpendingMoon
  EDITORS: ImpendingMoon,
- CREATED: 3 Dec 2022
- EDITED : 11 Dec 2022
+ CREATED: 17 Dec 2022
+ EDITED : 17 Dec 2022
  ******************************************************************************/
 
 /******************************************************************************
- The main entrypoint for ASCII-Boy.
+ Handles all rendering via ncurses
  ******************************************************************************/
 
-#pragma once
-
-#include "core.hpp"
-#include "emu/gbsystem.hpp"
-
-// Safely exits the program when an exit signal is called
-void exitHandler(int signal);
+#include "renderer.hpp"

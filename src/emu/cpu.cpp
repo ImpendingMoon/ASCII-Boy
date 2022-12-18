@@ -1950,7 +1950,7 @@ int CPU::execute(uint8_t opcode, MMU &mem)
 	{
 		ins.mnemonic = "RST";
 
-		uint16_t vector;
+		uint16_t vector = 0;
 
 		// Get jump location
 		switch(opcode)
