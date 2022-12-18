@@ -4,7 +4,7 @@
  AUTHOR : ImpendingMoon
  EDITORS: ImpendingMoon,
  CREATED: 3 Dec 2022
- EDITED : 11 Dec 2022
+ EDITED : 18 Dec 2022
  ******************************************************************************/
 
 /******************************************************************************
@@ -49,7 +49,7 @@ int CPU::execute(uint8_t opcode, MMU &mem)
 	flags.byteToFlags(regs.f);
 	regs.pc++;
 
-	Logger::instance().log(
+	Logger::log(
 			fmt::format("CPU: Executing instruction 0x{:02X}.", opcode),
 			Logger::EXTREME
 			);
@@ -383,7 +383,7 @@ int CPU::execute(uint8_t opcode, MMU &mem)
 
 		// Change opcode for logging
 		ins.opcode = 0xCB00 + opcode;
-		Logger::instance().log(
+		Logger::log(
 				fmt::format("CPU: Executing 2-Byte Instruction 0x{:04X}", ins.opcode),
 				Logger::EXTREME
 				);
@@ -2100,19 +2100,19 @@ int CPU::execute(uint8_t opcode, MMU &mem)
 
 	if(!done)
 	{
-		Logger::instance().log(
+		Logger::log(
 				fmt::format("CPU: Unhandled instruction 0x{:02X}!",
 									opcode),
 				Logger::DEBUG
 				);
 	} else {
 
-		Logger::instance().log(
+		Logger::log(
 				fmt::format("CPU: Executed instruction {0}",
 									instructionToString(ins)),
 				Logger::EXTREME
 				);
-		Logger::instance().log(
+		Logger::log(
 				fmt::format("CPU: New register state {0}",
 									registerToString(regs)),
 				Logger::EXTREME
@@ -2232,8 +2232,8 @@ TargetID CPU::toTarget(uint8_t id)
 		{
 			// This should be impossible.
 			throw std::logic_error(
-					"Invalid ID in toTarget(). If this happens, let Moon know."
-					);
+			"Invalid ID in toTarget(). If this happens, let Moon know."
+			);
 		}
 	}
 }

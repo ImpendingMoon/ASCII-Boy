@@ -4,7 +4,7 @@
  AUTHOR : ImpendingMoon
  EDITORS: ImpendingMoon,
  CREATED: 17 Dec 2022
- EDITED : 17 Dec 2022
+ EDITED : 18 Dec 2022
  ******************************************************************************/
 
 /******************************************************************************
@@ -38,7 +38,9 @@ void setState(ProgramState newState)
 // Initializes the program with the renderer, config, and logger
 void initProgram()
 {
+    Logger::initLogger();
     initRenderer();
+    Logger::log("Program starting.", Logger::VERBOSE);
 }
 
 
@@ -46,7 +48,9 @@ void initProgram()
 // Safely closes parts of the program that need cleanup
 void exitProgram()
 {
+    Logger::log("Program exiting.", Logger::VERBOSE);
     exitRenderer();
+    Logger::exitLogger();
 }
 
 
@@ -54,6 +58,8 @@ void exitProgram()
 // Runs the main program loop, with a given starting state
 void runProgram(ProgramState startingState)
 {
+    Logger::log("Main loop running.", Logger::VERBOSE);
+
     programState = startingState;
 
     while(programState != EXITING)
@@ -90,6 +96,7 @@ void runProgram(ProgramState startingState)
 
             case EXITING:
             {
+                Logger::log("Program exiting main loop.", Logger::VERBOSE);
                 break;
             } // End Exiting
         } // End Switch

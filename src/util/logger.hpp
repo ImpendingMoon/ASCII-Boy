@@ -4,7 +4,7 @@
  AUTHOR : ImpendingMoon
  EDITORS: ImpendingMoon,
  CREATED: 5 Dec 2022
- EDITED : 7 Dec 2022
+ EDITED : 18 Dec 2022
  ******************************************************************************/
 
 /******************************************************************************
@@ -16,41 +16,11 @@
 #include <iostream>
 #include <fstream>
 #include <filesystem>
+#include <ctime>
 #include "../../lib/fmt/core.h"
 
-// Logger is a singleton that handles writing to console/logfile
-// NOTE: Creation is not thread-safe, but is called in main() before anything
-// else is started, so it should be fine for this program.
-class Logger
+namespace Logger
 {
-private:
-	// Private constructor/destructor
-	Logger();
-	virtual ~Logger();
-
-	// Gets a timestamp. Used in log()
-	std::string getTimestamp();
-
-	std::string log_file_path;
-	std::ofstream LogFile;
-
-	int log_level;
-	bool log_to_console;
-	bool log_to_file;
-
-public:
-	// Gets the instanced Logger object
-	static Logger& instance()
-	{
-		static Logger instance;
-		return instance;
-	}
-
-	// Singleton stuff
-	Logger(Logger const&) = delete;
-	void operator = (Logger const&) = delete;
-
-
 	// LogLevel is used to set what logs will be output from the settings
 	// If a log()'s level is above the setting's log level, it will not be sent
 	enum LogLevel
@@ -64,17 +34,30 @@ public:
 		// The MMU, CPU, and PPU use it to log every single operation they do.
 	};
 
-	// Actually useful functions //
+	// Initializes the Logger and Logfile
+	void initLogger();
+	// Closes the Logfile
+	void exitLogger();
 
+	// Gets the log level
+	int getLogLevel();
+	// Sets the log level
+	void setLogLevel(LogLevel newLevel);
+	// Gets if logging to console
+	bool isLogToConsole();
+	// Sets if logging to console
+	void setLogToConsole(bool value);
+	// Gets if logging to file
+	bool isLogToFile();
+	// Sets if logging to file
+	void setLogToFile(bool value);
 	// Gets the current file path for the LogFile
 	std::string getLogFilePath();
-
 	// Returns if the LogFile is open
 	bool isLogFileOpen();
 
 	// Logs a message with the given level
 	void log(std::string message, LogLevel level);
-
-	// Logs a message with a default level (Verbose
+	// Logs a message with a default level (Verbose)
 	void log(std::string message);
 };

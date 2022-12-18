@@ -4,7 +4,7 @@
  AUTHOR : ImpendingMoon
  EDITORS: ImpendingMoon,
  CREATED: 3 Dec 2022
- EDITED : 12 Dec 2022
+ EDITED : 18 Dec 2022
  ******************************************************************************/
 
 /******************************************************************************
@@ -127,7 +127,7 @@ void MMU::setERAM(int bank_amount,
 		// Check to see that the file was created
 		if(!SavFile)
 		{
-			Logger::instance().log("MEM: Could not open .sav file! "
+			Logger::log("MEM: Could not open .sav file! "
 								   "Saves will not be permanent!",
 								   Logger::ERRORS);
 		}
@@ -173,7 +173,7 @@ uint8_t MMU::readByte(uint16_t address)
 // Reads a byte from memory, can ignore PPU locks
 uint8_t MMU::readByte(uint16_t address, bool is_ppu)
 {
-	Logger::instance().log(
+	Logger::log(
 			fmt::format("MEM: Reading value from ${:04X}.",
 						address),
 			Logger::EXTREME);
@@ -189,7 +189,7 @@ uint8_t MMU::readByte(uint16_t address, bool is_ppu)
 	// Check for unmapped memory
 	if(address >= 0xFEA0 && address <= 0xFEFF)
 	{
-		Logger::instance().log(
+		Logger::log(
 				"MEM: Attempted read of undefined memory.",
 				Logger::DEBUG);
 		return 0xFF; // Usually returns 0xFF from the bus on hardware
@@ -207,7 +207,7 @@ uint8_t MMU::readByte(uint16_t address, bool is_ppu)
 		// Bounds checking
 		if(ROM2_index < 0 || ROM2_index >= ROM2_bank_amount)
 		{
-			Logger::instance().log(
+			Logger::log(
 					"MEM: Attempted read of invalid ROM2 bank.",
 					Logger::DEBUG);
 
@@ -240,7 +240,7 @@ uint8_t MMU::readByte(uint16_t address, bool is_ppu)
 		// Bounds checking
 		if(ERAM_index < 0 || ERAM_index >= ERAM_bank_amount)
 		{
-			Logger::instance().log(
+			Logger::log(
 					"MEM: Attempted read of invalid ERAM bank.",
 					Logger::DEBUG);
 
@@ -296,7 +296,7 @@ uint8_t MMU::readByte(uint16_t address, bool is_ppu)
 	}
 
 	// This should not be an accessible branch.
-	Logger::instance().log(
+	Logger::log(
 			"MEM: Invalid address provided to readByte()!",
 			Logger::ERRORS);
 
@@ -317,7 +317,7 @@ void MMU::writeByte(uint16_t address, uint8_t value, bool is_ppu)
 {
 	// TODO: Handle writes to ROM as MBC controls
 
-	Logger::instance().log(
+	Logger::log(
 			fmt::format("MEM: Writing value 0x{:02X} to ${:04X}.",
 						value, address),
 			Logger::EXTREME);
@@ -334,7 +334,7 @@ void MMU::writeByte(uint16_t address, uint8_t value, bool is_ppu)
 	// Check for unmapped memory
 	if(address >= 0xFEA0 && address <= 0xFEFF)
 	{
-		Logger::instance().log(
+		Logger::log(
 				"MEM: Attempted write of undefined memory.",
 				Logger::DEBUG);
 		return;
@@ -343,7 +343,7 @@ void MMU::writeByte(uint16_t address, uint8_t value, bool is_ppu)
 	// ROM1
 	if(address <= 0x3FFF)
 	{
-		Logger::instance().log(
+		Logger::log(
 				"MEM: Attempted write of ROM1.",
 				Logger::DEBUG);
 		return;
@@ -352,7 +352,7 @@ void MMU::writeByte(uint16_t address, uint8_t value, bool is_ppu)
 	// ROM2
 	if(address >= 0x4000 && address <= 0x7FFF)
 	{
-		Logger::instance().log(
+		Logger::log(
 				"MEM: Attempted write of ROM2.",
 				Logger::DEBUG);
 
@@ -380,7 +380,7 @@ void MMU::writeByte(uint16_t address, uint8_t value, bool is_ppu)
 		// Bounds checking
 		if(ERAM_index < 0 || ERAM_index >= ERAM_bank_amount)
 		{
-			Logger::instance().log(
+			Logger::log(
 					"MEM: Attempted write to invalid ERAM bank.",
 					Logger::DEBUG);
 
@@ -443,7 +443,7 @@ void MMU::writeByte(uint16_t address, uint8_t value, bool is_ppu)
 	}
 
 	// This should not be an accessible branch.
-	Logger::instance().log(
+	Logger::log(
 			"MEM: Invalid address provided to writeByte()!",
 			Logger::ERRORS);
 }
@@ -548,7 +548,7 @@ inline uint8_t MMU::getByte(uint16_t address)
 	}
 
 	// This should not be an accessible branch.
-	Logger::instance().log(
+	Logger::log(
 			"MEM: Invalid address provided to getByte()!",
 			Logger::ERRORS);
 
@@ -562,7 +562,7 @@ uint8_t MMU::readERAMByte(int bank, uint16_t address)
 {
 	if(bank > ERAM_bank_amount)
 	{
-		Logger::instance().log("MEM: Attempted read of invalid ERAM bank.",
+		Logger::log("MEM: Attempted read of invalid ERAM bank.",
 							   Logger::DEBUG);
 		return 0xFF;
 	}
@@ -587,7 +587,7 @@ void MMU::writeERAMByte(int bank, uint16_t address, uint8_t value)
 {
 	if(bank > ERAM_bank_amount)
 	{
-		Logger::instance().log("MEM: Attempted write of invalid ERAM bank.",
+		Logger::log("MEM: Attempted write of invalid ERAM bank.",
 							   Logger::DEBUG);
 		return;
 	}

@@ -4,7 +4,7 @@
  AUTHOR : ImpendingMoon
  EDITORS: ImpendingMoon,
  CREATED: 9 Dec 2022
- EDITED : 11 Dec 2022
+ EDITED : 18 Dec 2022
  ******************************************************************************/
 
 /******************************************************************************
@@ -97,9 +97,9 @@ void Cartridge::loadROM(MMU& mem)
 		RomFile.seekg(0); // Reset position
 
 	} catch(std::exception& ex) {
-		Logger::instance().log("CART: Could not read ROM Header.",
-							   Logger::ERRORS);
-		Logger::instance().log(ex.what(), Logger::ERRORS);
+		Logger::log("CART: Could not read ROM Header.",
+					Logger::ERRORS);
+		Logger::log(ex.what(), Logger::ERRORS);
 
 		// Rethrow with more descriptive message
 		throw std::runtime_error("ROM is corrupt: Could not read ROM Header.");

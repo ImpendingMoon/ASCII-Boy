@@ -4,7 +4,7 @@
  AUTHOR : ImpendingMoon
  EDITORS: ImpendingMoon,
  CREATED: 5 Dec 2022
- EDITED : 8 Dec 2022
+ EDITED : 18 Dec 2022
  ******************************************************************************/
 
 /******************************************************************************
@@ -13,8 +13,19 @@
 
 #include "logger.hpp"
 
+// Gets a timestamp. Used in log()
+std::string getTimestamp();
+
+
+std::string log_file_path;
+std::ofstream LogFile;
+
+int log_level;
+bool log_to_console;
+bool log_to_file;
+
 // Constructor
-Logger::Logger()
+void Logger::initLogger()
 {
 	// The LogFile is placed in either %APPDATA%\ImpendingMoon\ASCII-Boy
 	// or ~/.local/share/ASCII-Boy/
@@ -62,16 +73,59 @@ Logger::Logger()
 
 	// TODO: Load these from a config
 	log_level = EXTREME;
-	log_to_console = true;
+	log_to_console = false; // Best not to use cout with curses
 	log_to_file = true;
 }
 
 
-// Destructor
-Logger::~Logger()
+// Closes the Logfile
+void Logger::exitLogger()
 {
 	// Close LogFile before destroying self
 	LogFile.close();
+}
+
+
+
+// Gets the log level
+int Logger::getLogLevel()
+{
+	return log_level;
+}
+
+
+// Sets the log level
+void Logger::setLogLevel(LogLevel newLevel)
+{
+	log_level = newLevel;
+}
+
+
+// Gets if logging to console
+bool Logger::isLogToConsole()
+{
+	return log_to_console;
+}
+
+
+// Sets if logging to console
+void Logger::setLogToConsole(bool value)
+{
+	log_to_console = value;
+}
+
+
+// Gets if logging to file
+bool Logger::isLogToFile()
+{
+	return log_to_file;
+}
+
+
+// Sets if logging to file
+void Logger::setLogToFile(bool value)
+{
+	log_to_file = value;
 }
 
 
@@ -121,10 +175,10 @@ void Logger::log(std::string message, LogLevel level)
 
 
 // Gets a timestamp. Used in log()
-std::string Logger::getTimestamp()
+std::string getTimestamp()
 {
 	// Get time and convert it to local time
-	time_t now = time(0);
+	time_t now = std::time(0);
 	tm *ltime = localtime(&now);
 
 	// Format local time as a string

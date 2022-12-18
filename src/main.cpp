@@ -4,7 +4,7 @@
  AUTHOR : ImpendingMoon
  EDITORS: ImpendingMoon,
  CREATED: 3 Dec 2022
- EDITED : 17 Dec 2022
+ EDITED : 18 Dec 2022
  ******************************************************************************/
 
 /******************************************************************************
@@ -36,10 +36,10 @@ int main()
 // Safely exits the program when an exit signal is called
 void exitHandler(int signal)
 {
-    // Logger::instance().log(gb->mem.dumpMemory(), Logger::DEBUG);
+    Logger::log("ASCII-Boy exited with code " + signal,
+                Logger::VERBOSE);
 
-    Logger::instance().log("ASCII-Boy exited with code " + signal,
-                           Logger::VERBOSE);
+    exitProgram();
 
     exit(0);
 }
