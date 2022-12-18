@@ -25,12 +25,26 @@ find_package(Curses REQUIRED)
 target_include_directories(${PROJECT_NAME} PRIVATE ${LIB_DIR} ${CURSES_INCLUDE_DIR})
 target_link_libraries(${PROJECT_NAME} ${CURSES_LIBRARIES})
 
-# TODO: Have separate Release and Debug options
-target_compile_options(${PROJECT_NAME} PUBLIC
+# -DCMAKE_BUILD_TYPE=* in CLI
+# Release uses O3 and does not generate debug symbols
+if(CMAKE_BUILD_TYPE STREQUAL "Release")
+
+	target_compile_options(
+		${PROJECT_NAME} PUBLIC
 		-Wall
 		-O3
-		-g
 		)
+
+else() # Default is Debug
+
+	target_compile_options(
+		${PROJECT_NAME} PUBLIC
+		-Wall
+		-O0
+		-g
+	)
+
+endif()
 
 # ASCII-Boy makes use of C++17 features.
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
