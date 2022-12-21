@@ -4,54 +4,51 @@
  AUTHOR : ImpendingMoon
  EDITORS: ImpendingMoon,
  CREATED: 18 Dec 2022
- EDITED : 18 Dec 2022
+ EDITED : 21 Dec 2022
  ******************************************************************************/
 
 /******************************************************************************
- The base abstract class for all menus.
+ The base class for all menus.
  ******************************************************************************/
 
 #pragma once
 
 #include "../../core.hpp"
 #include "../renderer.hpp"
+#include "comp/button.hpp"
 
 class Menu
 {
 public:
     // Initializes and renders a menu
     virtual void initMenu() = 0;
-    // Exits a menu
-    virtual void exitMenu() = 0;
+    // Renders a menu
+    virtual void renderMenu() = 0;
+    // Exits a menu by clearing the screen
+    void exitMenu();
     // Switches to another menu
-    virtual void gotoMenu(Menu& menu) = 0;
+    void gotoMenu(Menu& menu);
 
-private:
-
-    // Used to store cursor position and button positions
-    struct point
-    {
-        uint32_t x;
-        uint32_t y;
-    };
-
-    // Interactive button
-    struct button
-    {
-        point position = {0,0};
-        // Option to disable the button
-        bool enabled = true;
-        // What is displayed on the screen
-        std::string display = "Button";
-        // Function to be run on interaction
-        std::function<void()> on_click;
-    };
+protected:
 
     point cursor_pos;
-    std::vector<button> buttons;
+    // List of buttons on the screen
+    std::vector<Button> buttons;
+    // Currently hovered button
+    uint32_t at_button;
 
+    // Creates a button and adds it to the vector of buttons
+    void createButton(point position,
+                      std::string active_display,
+                      std::string inactive_display,
+                      bool enabled,
+                      std::function<void()> onClick
+                     );
     // Moves the cursor to the next valid position
-    virtual void moveCursor() = 0;
+    // NOTE: Expects all buttons to be laid out in order
+    void moveCursor(uint32_t key);
+    // Clicks on the currently hovered button
+    void clickButton();
     // Puts the terminal into cooked mode and gets a string from the user
-    virtual std::string getString() = 0;
+    std::string getString();
 };

@@ -4,7 +4,7 @@
  AUTHOR : ImpendingMoon
  EDITORS: ImpendingMoon,
  CREATED: 18 Dec 2022
- EDITED : 18 Dec 2022
+ EDITED : 21 Dec 2022
  ******************************************************************************/
 
 /******************************************************************************
@@ -14,6 +14,7 @@
 
 #pragma once
 
+#include "../../core.hpp"
 #include "menu.hpp"
 
 class MenuMain : Menu
@@ -25,17 +26,10 @@ public:
 
     // Initializes and renders the menu
     void initMenu() override;
-    // Exits the menu
-    void exitMenu() override;
-    // Goes to another menu
-    void gotoMenu(Menu& menu) override;
+    // Renders a menu
+    void renderMenu() override;
 
 private:
-
-    // Moves the cursor to the next valid position
-    void moveCursor() override;
-    // Puts the terminal into cooked move and gets a string from the user
-    std::string getString() override;
 
     // The logo broken down into lines of strings
     std::array<std::string, 17> logo
@@ -58,4 +52,7 @@ private:
         "                __/ |",
         "               |___/ ",
     };
+
+    // Renders the logo specified in the array above
+    void renderLogo();
 };

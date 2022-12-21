@@ -4,7 +4,7 @@
  AUTHOR : ImpendingMoon
  EDITORS: ImpendingMoon,
  CREATED: 18 Dec 2022
- EDITED : 18 Dec 2022
+ EDITED : 21 Dec 2022
  ******************************************************************************/
 
 /******************************************************************************
@@ -15,7 +15,43 @@
 #include "menumain.hpp"
 
 // Constructor
-MenuMain::MenuMain() = default;
+MenuMain::MenuMain()
+{
+    // Start position for buttons
+    point buttonPos = {(GB_X_RES / 2) - 7, 30};
+
+    createButton(
+        buttonPos,
+        "[x] Play Game",
+        "[ ] Play Game",
+        true,
+        nullptr
+    );
+
+    createButton(
+        {buttonPos.x, buttonPos.y + 2},
+        "[x] Load ROM",
+        "[ ] Load ROM",
+        true,
+        nullptr
+    );
+
+    createButton(
+        {buttonPos.x, buttonPos.y + 4},
+        "[x] Settings",
+        "[ ] Settings",
+        true,
+        nullptr
+    );
+
+    createButton(
+        {buttonPos.x, buttonPos.y + 6},
+        "[x] Exit",
+        "[ ] Exit",
+        true,
+        nullptr
+    );
+}
 
 // Destructor
 MenuMain::~MenuMain() = default;
@@ -24,7 +60,37 @@ MenuMain::~MenuMain() = default;
 // Initializes and renders the menu
 void MenuMain::initMenu()
 {
+    renderMenu();
+}
+
+// Renders a menu
+void MenuMain::renderMenu()
+{
     // Render the main logo
+    renderLogo();
+
+    // Print border around window
+    wborder(stdscr, '|', '|', '-', '-', '+', '+', '+', '+');
+
+    // Print buttons
+    for(Button button : buttons)
+    {
+        point pos = button.getPosition();
+
+        // Move cursor to position
+        wmove(stdscr, pos.y, pos.x);
+
+        // Print display text
+        printw(button.getCurrentDisplay().c_str());
+
+    }
+
+    render();
+}
+
+// Renders the logo specified in the array above
+void MenuMain::renderLogo()
+{
     // Line # to start printing logo
     constexpr uint32_t Y_OFFSET = 10;
 
@@ -38,37 +104,4 @@ void MenuMain::initMenu()
         // Print line at correct position
         mvprintw(i + Y_OFFSET, center, "%s", line.c_str());
     }
-
-    // Print border around window
-    wborder(stdscr, '|', '|', '-', '-', '+', '+', '+', '+');
-
-    render();
-}
-
-
-// Exits the menu
-void MenuMain::exitMenu()
-{
-
-}
-
-
-// Goes to another menu
-void MenuMain::gotoMenu(Menu& menu)
-{
-
-}
-
-
-// Moves the cursor to the next valid position
-void MenuMain::moveCursor()
-{
-
-}
-
-
-// Puts the terminal into cooked move and gets a string from the user
-std::string MenuMain::getString()
-{
-
 }
