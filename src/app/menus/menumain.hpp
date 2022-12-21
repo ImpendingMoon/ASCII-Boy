@@ -16,8 +16,9 @@
 
 #include "../../core.hpp"
 #include "menu.hpp"
+#include "../program.hpp"
 
-class MenuMain : Menu
+class MenuMain : public Menu
 {
 public:
 

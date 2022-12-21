@@ -13,6 +13,21 @@
 
 #include "menu.hpp"
 
+// Initializes and renders a menu
+void Menu::initMenu()
+{
+    render();
+}
+
+
+
+// Renders a menu
+void Menu::renderMenu()
+{
+    render();
+}
+
+
 
 // Exits a menu by clearing the screen
 void Menu::exitMenu()
@@ -31,6 +46,26 @@ void Menu::gotoMenu(Menu& menu)
 {
     this->exitMenu();
     menu.initMenu();
+}
+
+
+
+// Sends a keypress to the menu
+void Menu::sendInput(int key)
+{
+    switch(key)
+    {
+        case KEY_UP: case KEY_DOWN:
+        {
+            moveCursor(key);
+            break;
+        }
+
+        case KEY_ENTER: case '\n': case KEY_RIGHT:
+        {
+            clickButton();
+        }
+    }
 }
 
 
@@ -62,7 +97,7 @@ void Menu::createButton(point position,
 
 // Moves the cursor to the next valid position
 // NOTE: Expects all buttons to be laid out in order
-void Menu::moveCursor(uint32_t key)
+void Menu::moveCursor(int key)
 {
     // If there are no buttons, go to origin
     if(buttons.empty())
@@ -90,8 +125,8 @@ void Menu::moveCursor(uint32_t key)
     }
     }
 
-    // Wrap to ensure in-bounds
-    at_button = emath::wrap(at_button, 0, buttons.size() - 1);
+    // Clamp to ensure in-bounds
+    at_button = std::clamp(at_button, 0, (int) buttons.size() - 1);
 
     // Set cursor position to new button
     cursor_pos = buttons.at(at_button).getPosition();

@@ -21,13 +21,15 @@ class Menu
 {
 public:
     // Initializes and renders a menu
-    virtual void initMenu() = 0;
+    virtual void initMenu();
     // Renders a menu
-    virtual void renderMenu() = 0;
+    virtual void renderMenu();
     // Exits a menu by clearing the screen
     void exitMenu();
     // Switches to another menu
     void gotoMenu(Menu& menu);
+    // Sends a keypress to the menu
+    void sendInput(int key);
 
 protected:
 
@@ -35,7 +37,7 @@ protected:
     // List of buttons on the screen
     std::vector<Button> buttons;
     // Currently hovered button
-    uint32_t at_button;
+    int at_button;
 
     // Creates a button and adds it to the vector of buttons
     void createButton(point position,
@@ -46,7 +48,7 @@ protected:
                      );
     // Moves the cursor to the next valid position
     // NOTE: Expects all buttons to be laid out in order
-    void moveCursor(uint32_t key);
+    void moveCursor(int key);
     // Clicks on the currently hovered button
     void clickButton();
     // Puts the terminal into cooked mode and gets a string from the user

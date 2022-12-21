@@ -4,7 +4,7 @@
  AUTHOR : ImpendingMoon
  EDITORS: ImpendingMoon,
  CREATED: 17 Dec 2022
- EDITED : 18 Dec 2022
+ EDITED : 21 Dec 2022
  ******************************************************************************/
 
 /******************************************************************************
@@ -24,6 +24,8 @@ void initRenderer()
     raw();
     cbreak();
     noecho();
+    nodelay(stdscr, true);
+    curs_set(0);
     // Handle special keys (backspace, shift, etc.)
     keypad(stdscr, true);
 }

@@ -4,7 +4,7 @@
  AUTHOR : ImpendingMoon
  EDITORS: ImpendingMoon,
  CREATED: 3 Dec 2022
- EDITED : 18 Dec 2022
+ EDITED : 21 Dec 2022
  ******************************************************************************/
 
 /******************************************************************************
@@ -25,7 +25,7 @@ int main()
 
     initProgram();
 
-    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    runProgram(MENU);
 
     exitProgram();
 

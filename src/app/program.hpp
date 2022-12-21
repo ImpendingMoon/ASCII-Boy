@@ -4,7 +4,7 @@
  AUTHOR : ImpendingMoon
  EDITORS: ImpendingMoon,
  CREATED: 17 Dec 2022
- EDITED : 17 Dec 2022
+ EDITED : 21 Dec 2022
  ******************************************************************************/
 
 /******************************************************************************
@@ -22,9 +22,7 @@
 
 enum ProgramState
 {
-    MENU_MAIN, // Main menu
-    MENU_ROM, // Choosing a ROM file
-    MENU_CONF, // Configuration menu
+    MENU, // Emulator is paused and user is in menu
     RUNNING, // Emulator is running
     PAUSED,  // Emulator is paused
     EXITING, // Program is preparing to exit

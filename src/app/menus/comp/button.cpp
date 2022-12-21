@@ -52,7 +52,7 @@ Button::~Button() = default;
 // Performs the function defined by on_click.
 void Button::click()
 {
-    if(on_click != nullptr)
+    if(enabled && on_click != nullptr)
     {
         on_click();
     }
@@ -64,12 +64,7 @@ void Button::click()
 // Sets the display's active state
 void Button::setActive(bool state)
 {
-    if(state)
-    {
-        current_display = active_display;
-    } else {
-        current_display = inactive_display;
-    }
+    current_display = state ? active_display : inactive_display;
 }
 
 

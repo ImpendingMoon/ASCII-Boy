@@ -49,7 +49,7 @@ MenuMain::MenuMain()
         "[x] Exit",
         "[ ] Exit",
         true,
-        nullptr
+        [](){ setState(EXITING); }
     );
 }
 
@@ -84,8 +84,6 @@ void MenuMain::renderMenu()
         printw(button.getCurrentDisplay().c_str());
 
     }
-
-    render();
 }
 
 // Renders the logo specified in the array above
