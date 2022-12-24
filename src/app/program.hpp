@@ -4,7 +4,7 @@
  AUTHOR : ImpendingMoon
  EDITORS: ImpendingMoon,
  CREATED: 17 Dec 2022
- EDITED : 21 Dec 2022
+ EDITED : 23 Dec 2022
  ******************************************************************************/
 
 /******************************************************************************
@@ -14,11 +14,8 @@
 #pragma once
 
 #include "../core.hpp"
-#include "renderer.hpp"
 
 #include "../emu/gbsystem.hpp"
-
-#include "menus/menumain.hpp"
 
 enum ProgramState
 {

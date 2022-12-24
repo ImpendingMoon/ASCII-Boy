@@ -4,7 +4,7 @@
  AUTHOR : ImpendingMoon
  EDITORS: ImpendingMoon,
  CREATED: 17 Dec 2022
- EDITED : 21 Dec 2022
+ EDITED : 23 Dec 2022
  ******************************************************************************/
 
 /******************************************************************************
@@ -18,9 +18,6 @@ using std::unique_ptr, std::make_unique;
 ProgramState programState = MENU;
 
 unique_ptr<GBSystem> gb{};
-
-MenuMain menuMain;
-int at_menu = 0;
 
 
 // Gets the current program state
@@ -43,13 +40,7 @@ void setState(ProgramState newState)
 void initProgram()
 {
     Logger::initLogger();
-    initRenderer();
     Logger::log("Program starting.", Logger::VERBOSE);
-
-    // Initialize main menu
-    menuMain.initMenu();
-
-    render();
 }
 
 
@@ -58,7 +49,6 @@ void initProgram()
 void exitProgram()
 {
     Logger::log("Program exiting.", Logger::VERBOSE);
-    exitRenderer();
     Logger::exitLogger();
 }
 
@@ -73,18 +63,13 @@ void runProgram(ProgramState startingState)
 
     while(programState != EXITING)
     {
-        // TODO: Process multiple inputs
-        int key = getch();
+        // TODO: Process input
 
         // Finite State Machines ftw
         switch(programState)
         {
             case MENU:
             {
-                // Send inputs to active menu
-                menuMain.sendInput(key);
-                // Render menu
-                menuMain.renderMenu();
                 break;
             } // End Menu
 
@@ -105,8 +90,8 @@ void runProgram(ProgramState startingState)
                 break;
             } // End Exiting
         } // End Switch
-    
-        render();
+
+        // TODO: Render
 
     } // End Loop
 

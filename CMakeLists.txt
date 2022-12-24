@@ -12,10 +12,6 @@ add_executable(
 	${SRC_DIR}/util/logger.cpp
 	${SRC_DIR}/main.cpp
 	${SRC_DIR}/app/program.cpp
-	${SRC_DIR}/app/renderer.cpp
-	${SRC_DIR}/app/menus/menu.cpp
-	${SRC_DIR}/app/menus/menumain.cpp
-	${SRC_DIR}/app/menus/comp/button.cpp
 	${SRC_DIR}/emu/gbstructs.cpp
 	${SRC_DIR}/emu/gbsystem.cpp
 	${SRC_DIR}/emu/cpu.cpp
