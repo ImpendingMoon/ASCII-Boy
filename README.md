@@ -1,2 +1,2 @@
-# ASCII-Boy
-A Gameboy Emulator that uses the terminal as an ASCII renderer.
+# MoonGB
+A Gameboy Emulator that may eventually be finished.
